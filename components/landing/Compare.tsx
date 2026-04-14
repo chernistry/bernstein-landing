@@ -1,19 +1,19 @@
 export function Compare() {
   return (
-    <section id="compare">
+    <section id="compare" aria-labelledby="compare-heading">
       <div className="section-header">
-        <h2>How it compares</h2>
+        <h2 id="compare-heading">How it compares</h2>
         <p>Different category, different architecture.</p>
       </div>
-      <div className="table-wrap">
-        <table className="compare-table">
+      <div className="table-wrap" tabIndex={0} role="region" aria-label="Comparison table, scroll horizontally">
+        <table className="compare-table" role="table" aria-label="Feature comparison between orchestration tools">
           <thead>
             <tr>
-              <th></th>
-              <th>Bernstein</th>
-              <th>CrewAI</th>
-              <th>AutoGen</th>
-              <th>LangGraph</th>
+              <th scope="col"></th>
+              <th scope="col">Bernstein</th>
+              <th scope="col">CrewAI</th>
+              <th scope="col">AutoGen</th>
+              <th scope="col">LangGraph</th>
             </tr>
           </thead>
           <tbody>

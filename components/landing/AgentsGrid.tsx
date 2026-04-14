@@ -16,9 +16,9 @@ export function AgentsGrid() {
   ];
 
   return (
-    <section id="agents">
+    <section id="agents" aria-labelledby="agents-heading">
       <div className="section-header">
-        <h2>Works with every major coding agent</h2>
+        <h2 id="agents-heading">Works with every major coding agent</h2>
         <p>Mix local models for boilerplate with cloud models for architecture. In the same run.</p>
       </div>
       <div className="agents-grid">
