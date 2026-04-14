@@ -74,9 +74,13 @@ Bernstein is an open-source multi-agent orchestration system for AI coding agent
 
 ## Supported Agents (21 adapters)
 
-Claude Code, Codex CLI, Gemini CLI, Cursor, Aider, Amp, Roo Code, Kiro, Qwen, Goose, Ollama, Cody, Continue, OpenCode, Tabby, Kilo, IaC, and more via a generic CLI adapter.
+Claude Code, Codex CLI, Gemini CLI, Cursor, Aider, Amp, Roo Code, Kiro, Qwen, Goose, Ollama, Cody, Continue, OpenCode, Tabby, Kilo, IaC, Cloudflare Agents, and more via a generic CLI adapter.
 
 ${posts.length > 0 ? `## Blog Posts\n\n${postList}` : ''}
+
+## Cloud Execution
+
+Bernstein supports running agents on Cloudflare Workers with Durable Workflows, V8 sandbox isolation, R2 workspace sync, Workers AI routing, D1 analytics, and Vectorize semantic caching. Use \`bernstein cloud\` CLI to deploy and manage cloud runs.
 
 ## Links
 
