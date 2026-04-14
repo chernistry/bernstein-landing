@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bernstein — Orchestrate Parallel AI Coding Agents</title>
+  <meta name="description" content="Open-source multi-agent orchestrator. Run Claude Code, Codex, Gemini CLI in parallel. Deterministic scheduling, quality gates, cost tracking. One command.">
+  <meta name="keywords" content="multi-agent orchestration, AI coding agents, Claude Code orchestrator, parallel AI agents, deterministic scheduling">
+  <link rel="canonical" href="https://bernstein.run">
+  <meta property="og:title" content="Bernstein — Orchestrate Parallel AI Coding Agents">
+  <meta property="og:description" content="Run multiple AI coding agents in parallel on your codebase. Any model. One command.">
+  <meta property="og:url" content="https://bernstein.run">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --border: #262626;
+      --text: #fafafa;
+      --muted: #a1a1aa;
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --green: #22c55e;
+      --orange: #f59e0b;
+      --code-bg: #1e1e2e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(10,10,10,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+    .nav-logo span { color: var(--muted); font-weight: 400; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a { color: var(--muted); font-size: 14px; font-weight: 500; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent); color: #fff; padding: 6px 16px;
+      border-radius: 6px; font-size: 13px; font-weight: 600;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--accent-hover); color: #fff; }
+
+    /* Hero */
+    .hero {
+      padding: 140px 24px 80px; text-align: center;
+      max-width: 800px; margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-block; padding: 4px 12px; border-radius: 20px;
+      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3);
+      color: var(--accent); font-size: 13px; font-weight: 500;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: clamp(36px, 5vw, 56px); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 20px;
+    }
+    h1 .gradient {
+      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: 18px; color: var(--muted); max-width: 600px;
+      margin: 0 auto 32px; line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      padding: 12px 24px; border-radius: 8px; font-size: 15px;
+      font-weight: 600; cursor: pointer; border: none; transition: all 0.2s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--muted); }
+
+    /* Install */
+    .install-block {
+      margin: 40px auto 0; max-width: 480px;
+      background: var(--code-bg); border-radius: 10px;
+      padding: 16px 20px; font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 15px; color: var(--green); position: relative;
+      border: 1px solid var(--border);
+    }
+    .install-block .prompt { color: var(--muted); }
+    .install-block .copy {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: 1px solid var(--border); color: var(--muted);
+      padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
+    }
+    .install-block .copy:hover { color: var(--text); border-color: var(--muted); }
+
+    /* Stats */
+    .stats {
+      display: flex; justify-content: center; gap: 48px;
+      padding: 48px 24px; flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+    /* Sections */
+    section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+    h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .section-sub { color: var(--muted); font-size: 16px; margin-bottom: 48px; max-width: 600px; }
+
+    /* How it works */
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .step {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 28px;
+    }
+    .step-num {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: rgba(59,130,246,0.1); color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px; margin-bottom: 16px;
+    }
+    .step h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+    .step p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+    /* Features */
+    .features {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .feature {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px;
+    }
+    .feature-icon { font-size: 24px; margin-bottom: 12px; }
+    .feature h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .feature p { color: var(--muted); font-size: 14px; }
+
+    /* Comparison */
+    .compare-table {
+      width: 100%; border-collapse: collapse;
+      background: var(--surface); border-radius: 12px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .compare-table th, .compare-table td {
+      padding: 12px 16px; text-align: left; font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-table th { background: var(--code-bg); color: var(--muted); font-weight: 600; font-size: 13px; }
+    .compare-table td:first-child { font-weight: 500; }
+    .check { color: var(--green); }
+    .cross { color: #ef4444; }
+
+    /* CTA */
+    .cta-section {
+      text-align: center; padding: 80px 24px;
+      background: linear-gradient(180deg, transparent, rgba(59,130,246,0.05));
+    }
+    .cta-section h2 { font-size: 36px; margin-bottom: 16px; }
+    .cta-section p { color: var(--muted); margin-bottom: 32px; font-size: 16px; }
+
+    /* Footer */
+    footer {
+      padding: 40px 24px; text-align: center;
+      border-top: 1px solid var(--border);
+      color: var(--muted); font-size: 13px;
+    }
+    footer a { color: var(--muted); }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      .nav-links a:not(.nav-cta) { display: none; }
+      .stats { gap: 32px; }
+      .hero { padding: 120px 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">bernstein <span>.run</span></div>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#compare">Compare</a>
+      <a href="https://github.com/chernistry/bernstein" class="nav-cta">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Open Source — Apache 2.0</div>
+  <h1>Orchestrate <span class="gradient">parallel AI agents</span> on your codebase</h1>
+  <p class="hero-sub">
+    Run Claude Code, Codex, Gemini CLI simultaneously. Deterministic scheduling.
+    Quality gates. Cost tracking. You come back to working code.
+  </p>
+  <div class="hero-actions">
+    <a href="https://github.com/chernistry/bernstein" class="btn btn-primary">View on GitHub</a>
+    <a href="https://bernstein.readthedocs.io/" class="btn btn-secondary">Documentation</a>
+  </div>
+  <div class="install-block">
+    <span class="prompt">$</span> pipx install bernstein
+    <button class="copy" onclick="navigator.clipboard.writeText('pipx install bernstein');this.textContent='Copied!'">Copy</button>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num">110+</div><div class="stat-label">GitHub Stars</div></div>
+  <div class="stat"><div class="stat-num">7.7K</div><div class="stat-label">Monthly Downloads</div></div>
+  <div class="stat"><div class="stat-num">29</div><div class="stat-label">Agent Adapters</div></div>
+  <div class="stat"><div class="stat-num">2,600+</div><div class="stat-label">Tests</div></div>
+</div>
+
+<section id="how">
+  <h2>How it works</h2>
+  <p class="section-sub">Three steps from goal to shipped code. No babysitting.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Set a goal</h3>
+      <p>Describe what you want in plain English. Bernstein decomposes it into tasks with the right roles, models, and dependencies.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Agents work in parallel</h3>
+      <p>Each agent gets its own git worktree. No file conflicts. Opus for architecture, Sonnet for implementation, Haiku for tests — automatically routed.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Verified and merged</h3>
+      <p>Quality gates run lint, types, and tests on every result. Only verified work gets merged. Failed tasks retry with escalated models.</p>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <h2>Built for real engineering teams</h2>
+  <p class="section-sub">Not a demo. A production orchestration system.</p>
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🎯</div>
+      <h3>Deterministic scheduling</h3>
+      <p>The orchestrator is pure Python. Zero LLM tokens wasted on coordination. Predictable, debuggable, fast.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔌</div>
+      <h3>29 agent adapters</h3>
+      <p>Claude Code, Codex, Gemini CLI, Aider, Amp, Cursor, and 23 more. Mix models in one run. Switch providers without changing anything.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🛡️</div>
+      <h3>Quality gates</h3>
+      <p>Lint, type check, tests, security scan, architecture conformance — all run automatically before merge. Failed work gets retried.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">💰</div>
+      <h3>Cost-aware routing</h3>
+      <p>Epsilon-greedy bandit learns which model works best per task type. Save 50-60% vs uniform expensive models.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🌳</div>
+      <h3>Git worktree isolation</h3>
+      <p>Each agent works in its own worktree. No merge conflicts between agents. Clean commit history.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📊</div>
+      <h3>Full observability</h3>
+      <p>Cost tracking, token monitoring, quality trends, post-mortem reports. Know exactly what happened and how much it cost.</p>
+    </div>
+  </div>
+</section>
+
+<section id="compare">
+  <h2>How it compares</h2>
+  <p class="section-sub">Bernstein vs popular alternatives.</p>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Feature</th><th>Bernstein</th><th>CrewAI</th><th>AutoGen</th><th>LangGraph</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Orchestrator</td><td>Deterministic code</td><td>LLM-driven</td><td>LLM-driven</td><td>Graph + LLM</td></tr>
+      <tr><td>Works with CLI agents</td><td><span class="check">Yes (29)</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td></tr>
+      <tr><td>Git isolation</td><td><span class="check">Worktrees</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td></tr>
+      <tr><td>Quality gates</td><td><span class="check">Built-in</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td><td>Partial</td></tr>
+      <tr><td>Cost tracking</td><td><span class="check">Per-agent</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td></tr>
+      <tr><td>Self-evolution</td><td><span class="check">Built-in</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="cta-section">
+  <h2>Start orchestrating in 30 seconds</h2>
+  <p>Install Bernstein, set a goal, watch agents work.</p>
+  <div class="install-block" style="margin: 0 auto 24px; max-width: 520px;">
+    <span class="prompt">$</span> pipx install bernstein && bernstein -g "your goal here"
+    <button class="copy" onclick="navigator.clipboard.writeText('pipx install bernstein');this.textContent='Copied!'">Copy</button>
+  </div>
+  <a href="https://github.com/chernistry/bernstein" class="btn btn-primary" style="font-size: 16px; padding: 14px 32px;">
+    View on GitHub
+  </a>
+</div>
+
+<footer>
+  <p>
+    Made by <a href="https://alexchernysh.com">Alex Chernysh</a> &middot;
+    <a href="https://github.com/chernistry/bernstein">GitHub</a> &middot;
+    <a href="https://pypi.org/project/bernstein/">PyPI</a> &middot;
+    Apache 2.0
+  </p>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Bernstein",
+  "description": "Open-source multi-agent orchestration platform for AI coding agents",
+  "url": "https://bernstein.run",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "macOS, Linux, Windows",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": { "@type": "Person", "name": "Alex Chernysh", "url": "https://alexchernysh.com" }
+}
+</script>
+
+</body>
+</html>

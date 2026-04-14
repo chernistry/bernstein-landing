@@ -1,0 +1,11 @@
+services:
+  bernstein-landing:
+    build: .
+    container_name: bernstein-landing
+    restart: unless-stopped
+    networks:
+      - deploy_homepage
+
+networks:
+  deploy_homepage:
+    external: true
