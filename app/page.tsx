@@ -110,7 +110,7 @@ export default function LandingPage() {
   return (
     <>
       <Nav />
-      <main>
+      <main id="main">
         <Hero />
         <Stats />
         <HowItWorks />
