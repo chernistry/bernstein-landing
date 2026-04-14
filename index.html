@@ -3,397 +3,943 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bernstein — Orchestrate Parallel AI Coding Agents</title>
-  <meta name="description" content="Open-source multi-agent orchestrator. Run Claude Code, Codex, Gemini CLI in parallel. Deterministic scheduling, quality gates, cost tracking. One command.">
+  <title>Bernstein — Multi-Agent Orchestration for CLI Coding Agents</title>
+  <meta name="description" content="Open-source orchestrator for parallel AI coding agents. Run Claude Code, Codex, Gemini CLI simultaneously with deterministic scheduling, quality gates, and cost tracking.">
   <meta name="keywords" content="multi-agent orchestration, AI coding agents, Claude Code orchestrator, parallel AI agents, deterministic scheduling">
   <link rel="canonical" href="https://bernstein.run">
-  <meta property="og:title" content="Bernstein — Orchestrate Parallel AI Coding Agents">
-  <meta property="og:description" content="Run multiple AI coding agents in parallel on your codebase. Any model. One command.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="author" content="Alex Chernysh">
+  <meta property="og:title" content="Bernstein — Multi-Agent Orchestration for CLI Coding Agents">
+  <meta property="og:description" content="Run multiple AI coding agents in parallel on your codebase. Deterministic scheduling. Quality gates. Any model. One command.">
   <meta property="og:url" content="https://bernstein.run">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Bernstein">
+  <meta property="og:image" content="https://bernstein.run/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Bernstein — Multi-Agent Orchestration for CLI Coding Agents">
+  <meta name="twitter:description" content="Run multiple AI coding agents in parallel on your codebase. Deterministic scheduling. Quality gates. Any model. One command.">
+  <meta name="twitter:image" content="https://bernstein.run/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0a0a;
-      --surface: #141414;
-      --border: #262626;
-      --text: #fafafa;
-      --muted: #a1a1aa;
-      --accent: #3b82f6;
-      --accent-hover: #60a5fa;
-      --green: #22c55e;
-      --orange: #f59e0b;
-      --code-bg: #1e1e2e;
+      --bg: oklch(0.19 0.01 255);
+      --surface: oklch(0.22 0.008 255);
+      --surface-hover: oklch(0.24 0.008 255);
+      --border: oklch(0.32 0.008 255);
+      --border-subtle: oklch(0.28 0.006 255);
+      --text: oklch(0.95 0.006 100);
+      --text-secondary: oklch(0.75 0.01 255);
+      --text-muted: oklch(0.58 0.01 255);
+      --accent: oklch(0.55 0.028 252);
+      --accent-hover: oklch(0.62 0.032 252);
+      --accent-subtle: oklch(0.25 0.02 252);
+      --green: oklch(0.65 0.15 145);
+      --red: oklch(0.55 0.15 25);
+      --code-bg: oklch(0.20 0.012 260);
+
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+      --shadow-xs: 0 1px 2px oklch(0 0 0 / 0.2);
+      --shadow-sm: 0 2px 4px oklch(0 0 0 / 0.15), 0 1px 2px oklch(0 0 0 / 0.1);
+      --shadow-md: 0 4px 12px -2px oklch(0 0 0 / 0.2), 0 2px 4px oklch(0 0 0 / 0.1);
+      --shadow-lg: 0 8px 24px -4px oklch(0 0 0 / 0.25), 0 4px 8px oklch(0 0 0 / 0.1);
+      --shadow-xl: 0 16px 48px -8px oklch(0 0 0 / 0.3);
+
+      --radius: 8px;
+      --radius-lg: 12px;
+
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 24px;
+      --space-6: 32px;
+      --space-7: 40px;
+      --space-8: 48px;
+      --space-9: 64px;
+      --space-10: 80px;
+      --space-11: 96px;
+      --space-12: 128px;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: var(--font-body);
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
-    a { color: var(--accent); text-decoration: none; }
+
+    ::selection {
+      background: color-mix(in oklch, var(--accent) 40%, transparent);
+      color: var(--text);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.15s ease-out;
+    }
     a:hover { color: var(--accent-hover); }
 
-    /* Nav */
-    nav {
-      position: fixed; top: 0; width: 100%; z-index: 100;
-      background: rgba(10,10,10,0.85); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 24px;
+    /* Focus visible */
+    :focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px color-mix(in oklch, var(--accent) 50%, transparent);
+      border-radius: var(--radius);
     }
+
+    /* ---- NAV ---- */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      background: color-mix(in oklch, var(--bg) 80%, transparent);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0 var(--space-5);
+      height: 52px;
+    }
+
     .nav-inner {
-      max-width: 1100px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 56px;
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
     }
-    .nav-logo { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
-    .nav-logo span { color: var(--muted); font-weight: 400; }
-    .nav-links { display: flex; gap: 24px; align-items: center; }
-    .nav-links a { color: var(--muted); font-size: 14px; font-weight: 500; }
+
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .nav-logo span {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-5);
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.15s ease-out;
+    }
     .nav-links a:hover { color: var(--text); }
-    .nav-cta {
-      background: var(--accent); color: #fff; padding: 6px 16px;
-      border-radius: 6px; font-size: 13px; font-weight: 600;
-      transition: background 0.2s;
-    }
-    .nav-cta:hover { background: var(--accent-hover); color: #fff; }
 
-    /* Hero */
+    .nav-github {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 500;
+      transition: background 0.15s ease-out, border-color 0.15s ease-out, color 0.15s ease-out;
+    }
+    .nav-github:hover {
+      background: var(--surface-hover);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .nav-github svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* ---- HERO ---- */
     .hero {
-      padding: 140px 24px 80px; text-align: center;
-      max-width: 800px; margin: 0 auto;
+      padding: 136px var(--space-5) var(--space-10);
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
     }
-    .hero-badge {
-      display: inline-block; padding: 4px 12px; border-radius: 20px;
-      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3);
-      color: var(--accent); font-size: 13px; font-weight: 500;
-      margin-bottom: 24px;
+
+    .hero h1 {
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: var(--space-4);
     }
-    h1 {
-      font-size: clamp(36px, 5vw, 56px); font-weight: 800;
-      letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 20px;
-    }
-    h1 .gradient {
-      background: linear-gradient(135deg, var(--accent), #a78bfa);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
+
     .hero-sub {
-      font-size: 18px; color: var(--muted); max-width: 600px;
-      margin: 0 auto 32px; line-height: 1.7;
+      font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+      color: var(--text-secondary);
+      line-height: 1.65;
+      max-width: 540px;
+      margin: 0 auto var(--space-7);
     }
-    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--space-3);
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: var(--space-7);
+    }
+
     .btn {
-      padding: 12px 24px; border-radius: 8px; font-size: 15px;
-      font-weight: 600; cursor: pointer; border: none; transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s ease-out, border-color 0.15s ease-out, transform 0.1s ease-out;
     }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn:active { transform: scale(0.98); }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--text);
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      color: var(--text);
+    }
+
     .btn-secondary {
-      background: transparent; color: var(--text);
+      background: transparent;
+      color: var(--text-secondary);
       border: 1px solid var(--border);
     }
-    .btn-secondary:hover { border-color: var(--muted); }
+    .btn-secondary:hover {
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
 
-    /* Install */
+    /* Install block */
     .install-block {
-      margin: 40px auto 0; max-width: 480px;
-      background: var(--code-bg); border-radius: 10px;
-      padding: 16px 20px; font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 15px; color: var(--green); position: relative;
-      border: 1px solid var(--border);
+      max-width: 420px;
+      margin: 0 auto;
+      background: var(--code-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      box-shadow: var(--shadow-sm);
     }
-    .install-block .prompt { color: var(--muted); }
-    .install-block .copy {
-      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-      background: none; border: 1px solid var(--border); color: var(--muted);
-      padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
+    .install-code {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .install-block .copy:hover { color: var(--text); border-color: var(--muted); }
+    .install-code .prompt { color: var(--text-muted); }
+    .install-code .cmd { color: var(--green); }
 
-    /* Stats */
+    .copy-btn {
+      flex-shrink: 0;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: calc(var(--radius) - 2px);
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      transition: color 0.15s ease-out, border-color 0.15s ease-out;
+    }
+    .copy-btn:hover {
+      color: var(--text-secondary);
+      border-color: var(--text-muted);
+    }
+    .copy-btn.copied {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    /* ---- STATS STRIP ---- */
     .stats {
-      display: flex; justify-content: center; gap: 48px;
-      padding: 48px 24px; flex-wrap: wrap;
+      display: flex;
+      justify-content: center;
+      gap: var(--space-9);
+      padding: var(--space-8) var(--space-5);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      flex-wrap: wrap;
     }
+
     .stat { text-align: center; }
-    .stat-num { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; }
-    .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
-
-    /* Sections */
-    section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
-    h2 {
-      font-size: 32px; font-weight: 700; letter-spacing: -0.02em;
-      margin-bottom: 12px;
+    .stat-num {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
     }
-    .section-sub { color: var(--muted); font-size: 16px; margin-bottom: 48px; max-width: 600px; }
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: var(--space-1);
+      font-weight: 500;
+    }
 
-    /* How it works */
+    /* ---- SECTIONS ---- */
+    section {
+      padding: var(--space-11) var(--space-5);
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      margin-bottom: var(--space-8);
+    }
+    .section-header h2 {
+      font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.3;
+      margin-bottom: var(--space-2);
+    }
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 480px;
+    }
+
+    /* ---- HOW IT WORKS ---- */
     .steps {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
     }
+
     .step {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      transition: border-color 0.15s ease-out;
     }
+    .step:hover { border-color: var(--border); }
+
     .step-num {
-      width: 32px; height: 32px; border-radius: 8px;
-      background: rgba(59,130,246,0.1); color: var(--accent);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 14px; margin-bottom: 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: var(--space-4);
     }
-    .step h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
-    .step p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .step h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: var(--space-2);
+      letter-spacing: -0.01em;
+    }
+    .step p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
 
-    /* Features */
-    .features {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .feature {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 24px;
-    }
-    .feature-icon { font-size: 24px; margin-bottom: 12px; }
-    .feature h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-    .feature p { color: var(--muted); font-size: 14px; }
-
-    /* Comparison */
-    .compare-table {
-      width: 100%; border-collapse: collapse;
-      background: var(--surface); border-radius: 12px; overflow: hidden;
-      border: 1px solid var(--border);
-    }
-    .compare-table th, .compare-table td {
-      padding: 12px 16px; text-align: left; font-size: 14px;
-      border-bottom: 1px solid var(--border);
-    }
-    .compare-table th { background: var(--code-bg); color: var(--muted); font-weight: 600; font-size: 13px; }
-    .compare-table td:first-child { font-weight: 500; }
-    .check { color: var(--green); }
-    .cross { color: #ef4444; }
-
-    /* Agents grid */
+    /* ---- AGENTS GRID ---- */
     .agents-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--space-3);
     }
-    .agent-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 16px 20px;
-      display: flex; align-items: center; gap: 12px;
-      font-size: 14px; font-weight: 500;
-    }
-    .agent-card .agent-models { color: var(--muted); font-size: 12px; font-weight: 400; }
 
-    /* Email capture */
-    .email-section {
-      text-align: center; padding: 64px 24px;
-      background: var(--surface); border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: var(--space-4) var(--space-5);
+      transition: border-color 0.15s ease-out;
     }
-    .email-section h2 { font-size: 28px; margin-bottom: 8px; }
-    .email-section p { color: var(--muted); margin-bottom: 24px; font-size: 15px; }
+    .agent-card:hover { border-color: var(--border); }
+
+    .agent-name {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    .agent-models {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ---- FEATURES ---- */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
+    }
+
+    .feature {
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      transition: border-color 0.15s ease-out;
+    }
+    .feature:hover { border-color: var(--border); }
+
+    .feature-icon {
+      width: 32px;
+      height: 32px;
+      margin-bottom: var(--space-4);
+      color: var(--text-muted);
+    }
+    .feature-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .feature h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: var(--space-2);
+      letter-spacing: -0.01em;
+    }
+    .feature p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ---- COMPARISON TABLE ---- */
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      font-size: 14px;
+    }
+    .compare-table th,
+    .compare-table td {
+      padding: var(--space-3) var(--space-5);
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .compare-table thead th {
+      background: var(--code-bg);
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.01em;
+    }
+    .compare-table tbody td:first-child {
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .compare-table tbody tr:last-child td { border-bottom: none; }
+    .compare-table tbody tr {
+      transition: background 0.1s ease-out;
+    }
+    .compare-table tbody tr:hover { background: var(--surface-hover); }
+
+    .check { color: var(--green); }
+    .cross { color: var(--red); }
+    .partial { color: var(--text-muted); }
+
+    /* ---- EMAIL CAPTURE ---- */
+    .email-section {
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: var(--space-10) var(--space-5);
+    }
+    .email-inner {
+      max-width: 480px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .email-inner h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-2);
+    }
+    .email-inner > p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: var(--space-6);
+    }
+
     .email-form {
-      display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
-      max-width: 460px; margin: 0 auto;
+      display: flex;
+      gap: var(--space-2);
     }
     .email-form input[type="email"] {
-      flex: 1; min-width: 220px; padding: 12px 16px; border-radius: 8px;
-      border: 1px solid var(--border); background: var(--bg); color: var(--text);
-      font-size: 15px; outline: none;
+      flex: 1;
+      min-width: 0;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.15s ease-out;
     }
-    .email-form input[type="email"]:focus { border-color: var(--accent); }
+    .email-form input[type="email"]::placeholder {
+      color: var(--text-muted);
+    }
+    .email-form input[type="email"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in oklch, var(--accent) 20%, transparent);
+    }
     .email-form button {
-      padding: 12px 24px; border-radius: 8px; border: none;
-      background: var(--accent); color: #fff; font-size: 15px;
-      font-weight: 600; cursor: pointer; transition: background 0.2s;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--accent);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
       white-space: nowrap;
+      transition: background 0.15s ease-out;
     }
     .email-form button:hover { background: var(--accent-hover); }
-    .email-note { color: var(--muted); font-size: 12px; margin-top: 12px; }
 
-    /* CTA */
+    .email-note {
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-top: var(--space-3);
+    }
+
+    /* ---- FINAL CTA ---- */
     .cta-section {
-      text-align: center; padding: 80px 24px;
-      background: linear-gradient(180deg, transparent, rgba(59,130,246,0.05));
+      text-align: center;
+      padding: var(--space-11) var(--space-5);
+      max-width: 1080px;
+      margin: 0 auto;
     }
-    .cta-section h2 { font-size: 36px; margin-bottom: 16px; }
-    .cta-section p { color: var(--muted); margin-bottom: 32px; font-size: 16px; }
+    .cta-section h2 {
+      font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      margin-bottom: var(--space-4);
+    }
+    .cta-section > p {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: var(--space-7);
+    }
+    .cta-section .install-block {
+      margin-bottom: var(--space-6);
+      max-width: 520px;
+    }
 
-    /* Footer */
+    /* ---- FOOTER ---- */
     footer {
-      padding: 40px 24px; text-align: center;
-      border-top: 1px solid var(--border);
-      color: var(--muted); font-size: 13px;
+      padding: var(--space-7) var(--space-5);
+      text-align: center;
+      border-top: 1px solid var(--border-subtle);
     }
-    footer a { color: var(--muted); }
-    footer a:hover { color: var(--text); }
+    footer p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    footer a {
+      color: var(--text-muted);
+      transition: color 0.15s ease-out;
+    }
+    footer a:hover { color: var(--text-secondary); }
 
-    @media (max-width: 640px) {
-      .nav-links a:not(.nav-cta) { display: none; }
-      .stats { gap: 32px; }
-      .hero { padding: 120px 20px 60px; }
+    /* ---- ANIMATIONS ---- */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero { animation: slideUp 0.5s ease-out; }
+    .stats { animation: fadeIn 0.5s ease-out 0.1s both; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      .steps { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .agents-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats { gap: var(--space-7); }
+      .nav-links a:not(.nav-github) { display: none; }
+      .email-form { flex-direction: column; }
+    }
+
+    @media (max-width: 480px) {
+      .hero { padding-top: 112px; }
+      .agents-grid { grid-template-columns: 1fr; }
+      .stats { gap: var(--space-6); }
+      .hero-actions { flex-direction: column; align-items: center; }
+    }
+
+    /* Safe area insets */
+    @supports (padding: env(safe-area-inset-bottom)) {
+      footer { padding-bottom: calc(var(--space-7) + env(safe-area-inset-bottom)); }
+      header { padding-left: calc(var(--space-5) + env(safe-area-inset-left)); padding-right: calc(var(--space-5) + env(safe-area-inset-right)); }
     }
   </style>
 </head>
 <body>
 
-<nav>
+<header>
   <div class="nav-inner">
-    <div class="nav-logo">bernstein <span>.run</span></div>
-    <div class="nav-links">
+    <div class="nav-logo">bernstein<span>.run</span></div>
+    <nav class="nav-links">
       <a href="#how">How it works</a>
+      <a href="#agents">Agents</a>
       <a href="#features">Features</a>
       <a href="#compare">Compare</a>
-      <a href="https://github.com/chernistry/bernstein" class="nav-cta">GitHub</a>
+      <a href="https://github.com/chernistry/bernstein" class="nav-github">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>Orchestrate parallel AI&nbsp;agents on your codebase</h1>
+    <p class="hero-sub">
+      Run Claude Code, Codex, and Gemini CLI simultaneously.
+      Deterministic scheduling, quality gates, cost tracking.
+      You come back to working code.
+    </p>
+    <div class="hero-actions">
+      <a href="https://github.com/chernistry/bernstein" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        View on GitHub
+      </a>
+      <a href="https://bernstein.readthedocs.io/" class="btn btn-secondary">Documentation</a>
+    </div>
+    <div class="install-block">
+      <div class="install-code"><span class="prompt">$</span> <span class="cmd">pipx install bernstein</span></div>
+      <button class="copy-btn" onclick="copyInstall(this, 'pipx install bernstein')">Copy</button>
     </div>
   </div>
-</nav>
 
-<div class="hero">
-  <div class="hero-badge">Open Source — Apache 2.0</div>
-  <h1>Orchestrate <span class="gradient">parallel AI agents</span> on your codebase</h1>
-  <p class="hero-sub">
-    Run Claude Code, Codex, Gemini CLI simultaneously. Deterministic scheduling.
-    Quality gates. Cost tracking. You come back to working code.
-  </p>
-  <div class="hero-actions">
-    <a href="https://github.com/chernistry/bernstein" class="btn btn-primary">View on GitHub</a>
-    <a href="https://bernstein.readthedocs.io/" class="btn btn-secondary">Documentation</a>
-  </div>
-  <div class="install-block">
-    <span class="prompt">$</span> pipx install bernstein
-    <button class="copy" onclick="navigator.clipboard.writeText('pipx install bernstein');this.textContent='Copied!'">Copy</button>
-  </div>
-</div>
-
-<div class="stats">
-  <div class="stat"><div class="stat-num">110+</div><div class="stat-label">GitHub Stars</div></div>
-  <div class="stat"><div class="stat-num">7.7K</div><div class="stat-label">Monthly Downloads</div></div>
-  <div class="stat"><div class="stat-num">29</div><div class="stat-label">Agent Adapters</div></div>
-  <div class="stat"><div class="stat-num">2,600+</div><div class="stat-label">Tests</div></div>
-</div>
-
-<section id="how">
-  <h2>How it works</h2>
-  <p class="section-sub">Three steps from goal to shipped code. No babysitting.</p>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <h3>Set a goal</h3>
-      <p>Describe what you want in plain English. Bernstein decomposes it into tasks with the right roles, models, and dependencies.</p>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">110+</div>
+      <div class="stat-label">GitHub stars</div>
     </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <h3>Agents work in parallel</h3>
-      <p>Each agent gets its own git worktree. No file conflicts. Opus for architecture, Sonnet for implementation, Haiku for tests — automatically routed.</p>
+    <div class="stat">
+      <div class="stat-num">7.7k</div>
+      <div class="stat-label">Monthly downloads</div>
     </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <h3>Verified and merged</h3>
-      <p>Quality gates run lint, types, and tests on every result. Only verified work gets merged. Failed tasks retry with escalated models.</p>
+    <div class="stat">
+      <div class="stat-num">29</div>
+      <div class="stat-label">Agent adapters</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2,600+</div>
+      <div class="stat-label">Tests passing</div>
     </div>
   </div>
-</section>
 
-<section id="features">
-  <h2>Built for real engineering teams</h2>
-  <p class="section-sub">Not a demo. A production orchestration system.</p>
-  <div class="features">
-    <div class="feature">
-      <div class="feature-icon">🎯</div>
-      <h3>Deterministic scheduling</h3>
-      <p>The orchestrator is pure Python. Zero LLM tokens wasted on coordination. Predictable, debuggable, fast.</p>
+  <section id="how">
+    <div class="section-header">
+      <h2>How it works</h2>
+      <p>Three steps. No babysitting.</p>
     </div>
-    <div class="feature">
-      <div class="feature-icon">🔌</div>
-      <h3>29 agent adapters</h3>
-      <p>Claude Code, Codex, Gemini CLI, Aider, Amp, Cursor, and 23 more. Mix models in one run. Switch providers without changing anything.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Set a goal</h3>
+        <p>Describe what you want built. Bernstein decomposes it into tasks with the right roles, models, and dependencies.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Agents work in parallel</h3>
+        <p>Each agent gets its own git worktree. Opus for architecture, Sonnet for implementation, Haiku for tests. Automatically routed.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Verified and merged</h3>
+        <p>Quality gates run lint, types, and tests on every result. Only verified work gets merged. Failed tasks retry with escalated models.</p>
+      </div>
     </div>
-    <div class="feature">
-      <div class="feature-icon">🛡️</div>
-      <h3>Quality gates</h3>
-      <p>Lint, type check, tests, security scan, architecture conformance — all run automatically before merge. Failed work gets retried.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">💰</div>
-      <h3>Cost-aware routing</h3>
-      <p>Epsilon-greedy bandit learns which model works best per task type. Save 50-60% vs uniform expensive models.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">🌳</div>
-      <h3>Git worktree isolation</h3>
-      <p>Each agent works in its own worktree. No merge conflicts between agents. Clean commit history.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">📊</div>
-      <h3>Full observability</h3>
-      <p>Cost tracking, token monitoring, quality trends, post-mortem reports. Know exactly what happened and how much it cost.</p>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section id="compare">
-  <h2>How it compares</h2>
-  <p class="section-sub">Bernstein vs popular alternatives.</p>
-  <table class="compare-table">
-    <thead>
-      <tr>
-        <th>Feature</th><th>Bernstein</th><th>CrewAI</th><th>AutoGen</th><th>LangGraph</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Orchestrator</td><td>Deterministic code</td><td>LLM-driven</td><td>LLM-driven</td><td>Graph + LLM</td></tr>
-      <tr><td>Works with CLI agents</td><td><span class="check">Yes (29)</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td></tr>
-      <tr><td>Git isolation</td><td><span class="check">Worktrees</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td></tr>
-      <tr><td>Quality gates</td><td><span class="check">Built-in</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td><td>Partial</td></tr>
-      <tr><td>Cost tracking</td><td><span class="check">Per-agent</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td></tr>
-      <tr><td>Self-evolution</td><td><span class="check">Built-in</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td><td><span class="cross">No</span></td></tr>
-    </tbody>
-  </table>
-</section>
+  <section id="agents">
+    <div class="section-header">
+      <h2>Works with every major coding agent</h2>
+      <p>Mix local models for boilerplate with cloud models for architecture. In the same run.</p>
+    </div>
+    <div class="agents-grid">
+      <div class="agent-card">
+        <div>
+          <div class="agent-name">Claude Code</div>
+          <div class="agent-models">Opus, Sonnet, Haiku</div>
+        </div>
+      </div>
+      <div class="agent-card">
+        <div>
+          <div class="agent-name">Codex CLI</div>
+          <div class="agent-models">GPT-5.4, GPT-5.4-mini</div>
+        </div>
+      </div>
+      <div class="agent-card">
+        <div>
+          <div class="agent-name">Gemini CLI</div>
+          <div class="agent-models">Gemini 3.1 Pro, 3 Flash</div>
+        </div>
+      </div>
+      <div class="agent-card">
+        <div>
+          <div class="agent-name">Cursor</div>
+          <div class="agent-models">Any model via Cursor</div>
+        </div>
+      </div>
+      <div class="agent-card">
+        <div>
+          <div class="agent-name">Aider</div>
+          <div class="agent-models">Any OpenAI/Anthropic</div>
+        </div>
+      </div>
+      <div class="agent-card">
+        <div>
+          <div class="agent-name">Ollama</div>
+          <div class="agent-models">Local, fully offline</div>
+        </div>
+      </div>
+      <div class="agent-card">
+        <div>
+          <div class="agent-name">Amp</div>
+          <div class="agent-models">Sourcegraph Amp</div>
+        </div>
+      </div>
+      <div class="agent-card">
+        <div>
+          <div class="agent-name">Goose</div>
+          <div class="agent-models">Block Goose CLI</div>
+        </div>
+      </div>
+      <div class="agent-card">
+        <div>
+          <div class="agent-name">Roo Code</div>
+          <div class="agent-models">VS Code extension CLI</div>
+        </div>
+      </div>
+      <div class="agent-card">
+        <div>
+          <div class="agent-name">Kiro</div>
+          <div class="agent-models">AWS Kiro CLI</div>
+        </div>
+      </div>
+      <div class="agent-card">
+        <div>
+          <div class="agent-name">Qwen</div>
+          <div class="agent-models">Alibaba Qwen Agent</div>
+        </div>
+      </div>
+      <div class="agent-card">
+        <div>
+          <div class="agent-name">+18 more</div>
+          <div class="agent-models">Generic CLI adapter</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<section id="agents">
-  <h2>Works with every major AI coding agent</h2>
-  <p class="section-sub">Mix cheap local models for boilerplate with heavy cloud models for architecture. In the same run.</p>
-  <div class="agents-grid">
-    <div class="agent-card"><div><strong>Claude Code</strong><br><span class="agent-models">Opus 4.6, Sonnet 4.6, Haiku 4.5</span></div></div>
-    <div class="agent-card"><div><strong>Codex CLI</strong><br><span class="agent-models">GPT-5.4, GPT-5.4-mini</span></div></div>
-    <div class="agent-card"><div><strong>Gemini CLI</strong><br><span class="agent-models">Gemini 3.1 Pro, 3 Flash</span></div></div>
-    <div class="agent-card"><div><strong>Cursor</strong><br><span class="agent-models">Any model via Cursor</span></div></div>
-    <div class="agent-card"><div><strong>Aider</strong><br><span class="agent-models">Any OpenAI/Anthropic model</span></div></div>
-    <div class="agent-card"><div><strong>Ollama</strong><br><span class="agent-models">Local models, fully offline</span></div></div>
-    <div class="agent-card"><div><strong>Amp</strong><br><span class="agent-models">Sourcegraph Amp</span></div></div>
-    <div class="agent-card"><div><strong>Goose</strong><br><span class="agent-models">Block Goose CLI</span></div></div>
-    <div class="agent-card"><div><strong>Roo Code</strong><br><span class="agent-models">VS Code extension CLI</span></div></div>
-    <div class="agent-card"><div><strong>Kiro</strong><br><span class="agent-models">AWS Kiro CLI</span></div></div>
-    <div class="agent-card"><div><strong>Qwen</strong><br><span class="agent-models">Alibaba Qwen Agent</span></div></div>
-    <div class="agent-card"><div><strong>+18 more</strong><br><span class="agent-models">Generic CLI adapter for any tool</span></div></div>
-  </div>
-</section>
+  <section id="features">
+    <div class="section-header">
+      <h2>Built for production use</h2>
+      <p>Not a demo. A system you can run unsupervised.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>Deterministic scheduling</h3>
+        <p>The orchestrator is pure Python. Zero LLM tokens on coordination. Predictable, debuggable, fast.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+        </div>
+        <h3>29 agent adapters</h3>
+        <p>Claude Code, Codex, Gemini CLI, Aider, and 25 more. Mix models in one run. Switch providers without changing config.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3>Quality gates</h3>
+        <p>Lint, type check, tests, security scan, architecture conformance. All run before merge. Failed work retries automatically.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <h3>Cost-aware routing</h3>
+        <p>Epsilon-greedy bandit learns which model works best per task type. Typical savings of 50-60% vs uniform model selection.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M6 3v12"/><path d="M18 9a3 3 0 100-6 3 3 0 000 6z"/><path d="M6 21a3 3 0 100-6 3 3 0 000 6z"/><path d="M18 9c-3 0-6 1-6 5v1"/></svg>
+        </div>
+        <h3>Git worktree isolation</h3>
+        <p>Each agent works in its own worktree. No merge conflicts between agents. Clean, linear commit history.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 9l-5 5-2-2-4 4"/></svg>
+        </div>
+        <h3>Full observability</h3>
+        <p>Per-agent cost tracking, token monitoring, quality trends, Prometheus metrics. Know what happened and what it cost.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="compare">
+    <div class="section-header">
+      <h2>How it compares</h2>
+      <p>Different category, different architecture.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Bernstein</th>
+            <th>CrewAI</th>
+            <th>AutoGen</th>
+            <th>LangGraph</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Orchestrator</td>
+            <td>Deterministic code</td>
+            <td class="partial">LLM-driven</td>
+            <td class="partial">LLM-driven</td>
+            <td class="partial">Graph + LLM</td>
+          </tr>
+          <tr>
+            <td>CLI agent support</td>
+            <td><span class="check">29 adapters</span></td>
+            <td><span class="cross">No</span></td>
+            <td><span class="cross">No</span></td>
+            <td><span class="cross">No</span></td>
+          </tr>
+          <tr>
+            <td>Git isolation</td>
+            <td><span class="check">Worktrees</span></td>
+            <td><span class="cross">No</span></td>
+            <td><span class="cross">No</span></td>
+            <td><span class="cross">No</span></td>
+          </tr>
+          <tr>
+            <td>Quality gates</td>
+            <td><span class="check">Built-in</span></td>
+            <td><span class="cross">No</span></td>
+            <td><span class="cross">No</span></td>
+            <td class="partial">Partial</td>
+          </tr>
+          <tr>
+            <td>Cost tracking</td>
+            <td><span class="check">Per-agent</span></td>
+            <td><span class="cross">No</span></td>
+            <td><span class="cross">No</span></td>
+            <td><span class="cross">No</span></td>
+          </tr>
+          <tr>
+            <td>Self-evolution</td>
+            <td><span class="check">Built-in</span></td>
+            <td><span class="cross">No</span></td>
+            <td><span class="cross">No</span></td>
+            <td><span class="cross">No</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
 
 <div class="email-section">
-  <h2>Stay in the loop</h2>
-  <p>Get notified about new releases, integrations, and orchestration tips. No spam.</p>
-  <form class="email-form" action="https://buttondown.com/api/emails/embed-subscribe/bernstein" method="post" target="popupwindow">
-    <input type="email" name="email" placeholder="you@company.com" required>
-    <button type="submit">Subscribe</button>
-  </form>
-  <p class="email-note">Unsubscribe anytime. We respect your inbox.</p>
+  <div class="email-inner">
+    <h2>Stay in the loop</h2>
+    <p>Releases, integrations, and orchestration patterns. No spam.</p>
+    <form class="email-form" action="https://buttondown.com/api/emails/embed-subscribe/bernstein" method="post" target="popupwindow">
+      <input type="email" name="email" placeholder="you@company.com" required aria-label="Email address">
+      <button type="submit">Subscribe</button>
+    </form>
+    <p class="email-note">Unsubscribe anytime.</p>
+  </div>
 </div>
 
 <div class="cta-section">
-  <h2>Start orchestrating in 30 seconds</h2>
-  <p>Install Bernstein, set a goal, watch agents work.</p>
-  <div class="install-block" style="margin: 0 auto 24px; max-width: 520px;">
-    <span class="prompt">$</span> pipx install bernstein && bernstein -g "your goal here"
-    <button class="copy" onclick="navigator.clipboard.writeText('pipx install bernstein');this.textContent='Copied!'">Copy</button>
+  <h2>Start orchestrating</h2>
+  <p>Install, set a goal, walk away.</p>
+  <div class="install-block">
+    <div class="install-code"><span class="prompt">$</span> <span class="cmd">pipx install bernstein && bernstein -g "your goal"</span></div>
+    <button class="copy-btn" onclick="copyInstall(this, 'pipx install bernstein && bernstein -g &quot;your goal&quot;')">Copy</button>
   </div>
-  <a href="https://github.com/chernistry/bernstein" class="btn btn-primary" style="font-size: 16px; padding: 14px 32px;">
+  <a href="https://github.com/chernistry/bernstein" class="btn btn-primary">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
     View on GitHub
   </a>
 </div>
@@ -407,17 +953,107 @@
   </p>
 </footer>
 
+<script>
+  function copyInstall(btn, text) {
+    navigator.clipboard.writeText(text).then(function() {
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+</script>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "Bernstein",
-  "description": "Open-source multi-agent orchestration platform for AI coding agents",
+  "description": "Open-source multi-agent orchestration system for AI coding agents. Coordinates Claude Code, Codex, Gemini CLI, and 26 other agents to work in parallel using deterministic scheduling, git worktree isolation, and quality gates.",
   "url": "https://bernstein.run",
   "applicationCategory": "DeveloperApplication",
+  "applicationSubCategory": "Multi-Agent Orchestration",
   "operatingSystem": "macOS, Linux, Windows",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-  "author": { "@type": "Person", "name": "Alex Chernysh", "url": "https://alexchernysh.com" }
+  "programmingLanguage": "Python",
+  "softwareRequirements": "Python 3.12+",
+  "license": "https://www.apache.org/licenses/LICENSE-2.0",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" },
+  "author": { "@type": "Person", "name": "Alex Chernysh", "url": "https://alexchernysh.com" },
+  "codeRepository": "https://github.com/chernistry/bernstein",
+  "downloadUrl": "https://pypi.org/project/bernstein/",
+  "featureList": [
+    "Deterministic scheduling",
+    "29 agent adapters",
+    "Git worktree isolation",
+    "Quality gates",
+    "Cost-aware routing",
+    "MCP server mode",
+    "A2A protocol support"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is Bernstein?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Bernstein is an open-source multi-agent orchestration system that coordinates AI coding agents (like Claude Code, Codex, Gemini CLI) to work in parallel on your codebase. It decomposes goals into tasks, assigns them to agents with isolated git worktrees, and verifies results through quality gates before merging."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I install Bernstein?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Install Bernstein with pipx: 'pipx install bernstein'. You can also use pip or uv. Requires Python 3.12+ and at least one supported CLI coding agent."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What AI coding agents does Bernstein support?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Bernstein supports 29 agents including Claude Code, Codex CLI, Gemini CLI, Cursor, Aider, Amp, Roo Code, Kiro, Qwen, Goose, Ollama, and more. It also has a generic adapter for wrapping any CLI tool."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does Bernstein differ from CrewAI or AutoGen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Bernstein's orchestrator is deterministic Python code — no LLM tokens are spent on coordination. It works with real CLI coding agents, provides git worktree isolation, runs quality gates on every result, and includes cost tracking. CrewAI and AutoGen use LLM-driven coordination and don't support CLI agents."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Bernstein free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Bernstein is open-source under the Apache 2.0 license. You only pay for the AI model API usage of the agents themselves."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Bernstein",
+  "url": "https://bernstein.run",
+  "logo": "https://bernstein.run/favicon.svg",
+  "sameAs": [
+    "https://github.com/chernistry/bernstein",
+    "https://pypi.org/project/bernstein/"
+  ]
 }
 </script>
 

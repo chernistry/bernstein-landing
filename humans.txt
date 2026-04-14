@@ -1,0 +1,18 @@
+/* TEAM */
+Creator: Alex Chernysh
+Site: https://alexchernysh.com
+GitHub: https://github.com/chernistry
+Location: Earth
+
+/* SITE */
+Last update: 2026-04-14
+Language: English
+Doctype: HTML5
+Framework: Static HTML, nginx:alpine
+Standards: HTML5, CSS3, JSON-LD
+
+/* SOFTWARE */
+Name: Bernstein
+Repository: https://github.com/chernistry/bernstein
+License: Apache 2.0
+Language: Python 3.12+

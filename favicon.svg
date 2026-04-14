@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Conductor's baton -->
+  <line x1="12" y1="52" x2="52" y2="12" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+  <!-- Baton tip -->
+  <circle cx="52" cy="12" r="4" fill="#60a5fa"/>
+  <!-- Baton grip -->
+  <ellipse cx="12" cy="52" rx="6" ry="4" fill="#3b82f6" transform="rotate(-45 12 52)"/>
+</svg>

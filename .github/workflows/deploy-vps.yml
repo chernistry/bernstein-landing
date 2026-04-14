@@ -1,0 +1,74 @@
+name: Deploy bernstein-landing to OVH VPS
+
+on:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure SSH
+        shell: bash
+        env:
+          VPS_DEPLOY_HOST: ${{ secrets.VPS_DEPLOY_HOST }}
+          VPS_DEPLOY_PORT: ${{ secrets.VPS_DEPLOY_PORT }}
+          VPS_DEPLOY_SSH_KEY: ${{ secrets.VPS_DEPLOY_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_DEPLOY_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p "${VPS_DEPLOY_PORT:-22}" -H "$VPS_DEPLOY_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        shell: bash
+        env:
+          VPS_DEPLOY_HOST: ${{ secrets.VPS_DEPLOY_HOST }}
+          VPS_DEPLOY_PORT: ${{ secrets.VPS_DEPLOY_PORT }}
+          VPS_DEPLOY_USER: ${{ secrets.VPS_DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/id_ed25519 -p "${VPS_DEPLOY_PORT:-22}" "${VPS_DEPLOY_USER}@${VPS_DEPLOY_HOST}" '
+            set -euo pipefail
+            cd /srv/bernstein-landing/app
+            git fetch origin master
+            git checkout master
+            git pull --ff-only origin master
+            docker compose up -d --build --remove-orphans
+            docker image prune -f >/dev/null 2>&1 || true
+          '
+
+      - name: Verify deployment
+        shell: bash
+        env:
+          VPS_DEPLOY_HOST: ${{ secrets.VPS_DEPLOY_HOST }}
+          VPS_DEPLOY_PORT: ${{ secrets.VPS_DEPLOY_PORT }}
+          VPS_DEPLOY_USER: ${{ secrets.VPS_DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/id_ed25519 -p "${VPS_DEPLOY_PORT:-22}" "${VPS_DEPLOY_USER}@${VPS_DEPLOY_HOST}" '
+            set -euo pipefail
+            sleep 3
+            if docker ps --filter name=bernstein-landing --format "{{.Status}}" | grep -q "Up"; then
+              echo "Container is running"
+            else
+              echo "ERROR: Container is not running"
+              docker logs bernstein-landing --tail 20
+              exit 1
+            fi
+            CONTAINER_IP=$(docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" bernstein-landing)
+            if curl -sf -o /dev/null "http://${CONTAINER_IP}:80"; then
+              echo "Health check passed (container responding on port 80)"
+            else
+              echo "ERROR: Container is up but not responding to HTTP"
+              docker logs bernstein-landing --tail 20
+              exit 1
+            fi
+          '
