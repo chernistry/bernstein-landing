@@ -11,7 +11,8 @@ export function AgentsGrid() {
     { name: 'Roo Code', models: 'VS Code extension CLI' },
     { name: 'Kiro', models: 'AWS Kiro CLI' },
     { name: 'Qwen', models: 'Alibaba Qwen Agent' },
-    { name: '+18 more', models: 'Generic CLI adapter' },
+    { name: 'Cloudflare Agents', models: 'Workers AI models' },
+    { name: '+9 more', models: 'Cody, Continue, IaC, OpenCode, Tabby...' },
   ];
 
   return (
