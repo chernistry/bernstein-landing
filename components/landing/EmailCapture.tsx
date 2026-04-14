@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import { ScrollReveal } from '@/components/ScrollReveal';
 
 export function EmailCapture() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -24,35 +25,44 @@ export function EmailCapture() {
   }
 
   return (
-    <div className="email-section">
-      <div className="email-inner">
-        <p className="email-kicker">Something new is coming</p>
-        <h2>Be the first to know</h2>
-        <p>We&apos;re building hosted orchestration and a cloud runtime. Early subscribers get first access, architecture deep-dives, and a voice in what ships next.</p>
-        <form className="email-form" onSubmit={handleSubmit}>
-          <input
-            type="email"
-            name="email_address"
-            placeholder="you@company.com"
-            required
-            aria-label="Email address"
-          />
-          <button
-            type="submit"
-            disabled={status === 'submitting' || status === 'success'}
-            style={status === 'success' ? { background: '#16a34a' } : undefined}
-          >
-            {status === 'submitting' ? 'Submitting\u2026' : status === 'success' ? 'You\u2019re in \u2713' : 'Get early access'}
-          </button>
-        </form>
-        <p className="email-note">
-          {status === 'success'
-            ? 'Check your inbox to confirm.'
-            : status === 'error'
-              ? 'Something went wrong. Try again.'
-              : 'No spam. Unsubscribe anytime.'}
-        </p>
+    <ScrollReveal>
+      <div className={`email-section${status === 'success' ? ' success' : ''}`}>
+        <div className="email-inner">
+          <p className="email-kicker">Something new is coming</p>
+          <h2>Be the first to know</h2>
+          <p>We&apos;re building hosted orchestration and a cloud runtime. Early subscribers get first access, architecture deep-dives, and a voice in what ships next.</p>
+          <form className="email-form" onSubmit={handleSubmit}>
+            <input
+              type="email"
+              name="email_address"
+              placeholder="you@company.com"
+              required
+              aria-label="Email address"
+            />
+            <button
+              type="submit"
+              disabled={status === 'submitting' || status === 'success'}
+              className={status === 'success' ? 'email-btn-success' : undefined}
+            >
+              {status === 'submitting' ? (
+                <span className="email-spinner" aria-label="Submitting">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="spin">
+                    <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="2" opacity="0.3"/>
+                    <path d="M14 8a6 6 0 00-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </span>
+              ) : status === 'success' ? 'You\u2019re in \u2713' : 'Get early access'}
+            </button>
+          </form>
+          <p className={`email-note${status === 'success' ? ' email-note-success' : ''}`}>
+            {status === 'success'
+              ? 'Check your inbox to confirm.'
+              : status === 'error'
+                ? 'Something went wrong. Try again.'
+                : 'No spam. Unsubscribe anytime.'}
+          </p>
+        </div>
       </div>
-    </div>
+    </ScrollReveal>
   );
 }

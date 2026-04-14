@@ -1,3 +1,7 @@
+'use client';
+
+import { ScrollReveal } from '@/components/ScrollReveal';
+
 export function AgentsGrid() {
   const agents = [
     { name: 'Claude Code', models: 'Opus, Sonnet, Haiku' },
@@ -11,24 +15,27 @@ export function AgentsGrid() {
     { name: 'Roo Code', models: 'VS Code extension CLI' },
     { name: 'Kiro', models: 'AWS Kiro CLI' },
     { name: 'Qwen', models: 'Alibaba Qwen Agent' },
-    { name: 'Cloudflare Agents', models: 'Workers AI models' },
-    { name: '+9 more', models: 'Cody, Continue, IaC, OpenCode, Tabby...' },
+    { name: '+18 more', models: 'Generic CLI adapter' },
   ];
 
   return (
     <section id="agents">
-      <div className="section-header">
-        <h2>Works with every major coding agent</h2>
-        <p>Mix local models for boilerplate with cloud models for architecture. In the same run.</p>
-      </div>
+      <ScrollReveal>
+        <div className="section-header">
+          <h2>Works with every major coding agent</h2>
+          <p>Mix local models for boilerplate with cloud models for architecture. In the same run.</p>
+        </div>
+      </ScrollReveal>
       <div className="agents-grid">
-        {agents.map((agent) => (
-          <div className="agent-card" key={agent.name}>
-            <div>
-              <div className="agent-name">{agent.name}</div>
-              <div className="agent-models">{agent.models}</div>
+        {agents.map((agent, i) => (
+          <ScrollReveal key={agent.name} delay={200 + Math.min(i * 50, 600)}>
+            <div className="agent-card">
+              <div>
+                <div className="agent-name">{agent.name}</div>
+                <div className="agent-models">{agent.models}</div>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         ))}
       </div>
     </section>
