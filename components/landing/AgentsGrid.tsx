@@ -108,10 +108,34 @@ const agents: Agent[] = [
     ),
   },
   {
-    name: '+9 more', models: 'Cody, Tabby, IaC, Kilo, ...', category: '',
+    name: 'Cody', models: 'Sourcegraph Cody', category: 'Editor',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="5" cy="5" r="1.5" /><circle cx="10" cy="5" r="1.5" /><circle cx="15" cy="5" r="1.5" /><circle cx="5" cy="10" r="1.5" /><circle cx="10" cy="10" r="1.5" /><circle cx="15" cy="10" r="1.5" /><circle cx="5" cy="15" r="1.5" /><circle cx="10" cy="15" r="1.5" /><circle cx="15" cy="15" r="1.5" />
+        <circle cx="10" cy="10" r="7" /><path d="M7 9c0-1 1-2 3-2s3 1 3 2" /><circle cx="7.5" cy="8" r="1" /><circle cx="12.5" cy="8" r="1" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Continue', models: 'VS Code / JetBrains', category: 'Editor',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 4v12l8-6z" /><path d="M14 4v12" />
+      </svg>
+    ),
+  },
+  {
+    name: 'OpenCode', models: 'Any OpenAI-compatible', category: 'CLI',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="14" height="14" rx="2" /><path d="M7 8l3 3-3 3" /><path d="M11 14h3" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Generic', models: 'Any CLI agent', category: 'Adapter',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 7h12M4 13h12" /><circle cx="7" cy="7" r="1.5" /><circle cx="13" cy="13" r="1.5" />
       </svg>
     ),
   },

@@ -582,6 +582,7 @@ section[id] {
   letter-spacing: -0.025em;
   line-height: 1.3;
   margin-bottom: var(--space-2);
+  text-wrap: balance;
 }
 .section-header p {
   color: var(--text-muted);
@@ -597,6 +598,8 @@ section[id] {
 }
 
 .step {
+  display: flex;
+  flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
@@ -651,13 +654,14 @@ section[id] {
 /* ---- AGENTS GRID ---- */
 .agents-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--space-3);
 }
 
 .agent-card {
   display: flex;
   align-items: flex-start;
+  min-height: 72px;
   gap: var(--space-3);
   background: var(--surface);
   border: 1px solid var(--border-subtle);
@@ -733,6 +737,8 @@ section[id] {
 }
 
 .feature {
+  display: flex;
+  flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
@@ -889,6 +895,7 @@ section[id] {
   font-weight: 700;
   letter-spacing: -0.03em;
   margin-bottom: var(--space-2);
+  text-wrap: balance;
 }
 .email-inner > p {
   color: var(--text-secondary);
@@ -1148,6 +1155,11 @@ footer {
 }
 
 /* ---- RESPONSIVE ---- */
+@media (max-width: 1024px) {
+  .agents-grid { grid-template-columns: repeat(3, 1fr); }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 768px) {
   .steps { grid-template-columns: 1fr; 
   .compare-table td:first-child,

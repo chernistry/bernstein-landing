@@ -84,6 +84,15 @@ export function Features() {
             <p>Expose Bernstein as an MCP server over HTTP. Connect from any MCP client, run orchestration remotely.</p>
           </div>
         </ScrollReveal>
+        <ScrollReveal delay={840}>
+          <div className="feature">
+            <div className="feature-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c-1.66 0-3-4.03-3-9s1.34-9 3-9m0 18c1.66 0 3-4.03 3-9s-1.34-9-3-9" fill="none" stroke="currentColor" strokeWidth="1.5"/><path d="M17 8l-1.5 2L17 12l-1.5 2" fill="none" stroke="currentColor" strokeWidth="1.2"/><path d="M7 8l1.5 2L7 12l1.5 2" fill="none" stroke="currentColor" strokeWidth="1.2"/></svg>
+            </div>
+            <h3>Self-evolution</h3>
+            <p>Analyzes quality metrics, cost trends, and failure patterns, then proposes and executes its own improvements. Ships upgrades to itself.</p>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );
