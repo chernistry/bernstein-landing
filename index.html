@@ -176,6 +176,46 @@
     .check { color: var(--green); }
     .cross { color: #ef4444; }
 
+    /* Agents grid */
+    .agents-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .agent-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px 20px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 14px; font-weight: 500;
+    }
+    .agent-card .agent-models { color: var(--muted); font-size: 12px; font-weight: 400; }
+
+    /* Email capture */
+    .email-section {
+      text-align: center; padding: 64px 24px;
+      background: var(--surface); border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .email-section h2 { font-size: 28px; margin-bottom: 8px; }
+    .email-section p { color: var(--muted); margin-bottom: 24px; font-size: 15px; }
+    .email-form {
+      display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+      max-width: 460px; margin: 0 auto;
+    }
+    .email-form input[type="email"] {
+      flex: 1; min-width: 220px; padding: 12px 16px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--bg); color: var(--text);
+      font-size: 15px; outline: none;
+    }
+    .email-form input[type="email"]:focus { border-color: var(--accent); }
+    .email-form button {
+      padding: 12px 24px; border-radius: 8px; border: none;
+      background: var(--accent); color: #fff; font-size: 15px;
+      font-weight: 600; cursor: pointer; transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .email-form button:hover { background: var(--accent-hover); }
+    .email-note { color: var(--muted); font-size: 12px; margin-top: 12px; }
+
     /* CTA */
     .cta-section {
       text-align: center; padding: 80px 24px;
@@ -316,6 +356,35 @@
     </tbody>
   </table>
 </section>
+
+<section id="agents">
+  <h2>Works with every major AI coding agent</h2>
+  <p class="section-sub">Mix cheap local models for boilerplate with heavy cloud models for architecture. In the same run.</p>
+  <div class="agents-grid">
+    <div class="agent-card"><div><strong>Claude Code</strong><br><span class="agent-models">Opus 4.6, Sonnet 4.6, Haiku 4.5</span></div></div>
+    <div class="agent-card"><div><strong>Codex CLI</strong><br><span class="agent-models">GPT-5.4, GPT-5.4-mini</span></div></div>
+    <div class="agent-card"><div><strong>Gemini CLI</strong><br><span class="agent-models">Gemini 3.1 Pro, 3 Flash</span></div></div>
+    <div class="agent-card"><div><strong>Cursor</strong><br><span class="agent-models">Any model via Cursor</span></div></div>
+    <div class="agent-card"><div><strong>Aider</strong><br><span class="agent-models">Any OpenAI/Anthropic model</span></div></div>
+    <div class="agent-card"><div><strong>Ollama</strong><br><span class="agent-models">Local models, fully offline</span></div></div>
+    <div class="agent-card"><div><strong>Amp</strong><br><span class="agent-models">Sourcegraph Amp</span></div></div>
+    <div class="agent-card"><div><strong>Goose</strong><br><span class="agent-models">Block Goose CLI</span></div></div>
+    <div class="agent-card"><div><strong>Roo Code</strong><br><span class="agent-models">VS Code extension CLI</span></div></div>
+    <div class="agent-card"><div><strong>Kiro</strong><br><span class="agent-models">AWS Kiro CLI</span></div></div>
+    <div class="agent-card"><div><strong>Qwen</strong><br><span class="agent-models">Alibaba Qwen Agent</span></div></div>
+    <div class="agent-card"><div><strong>+18 more</strong><br><span class="agent-models">Generic CLI adapter for any tool</span></div></div>
+  </div>
+</section>
+
+<div class="email-section">
+  <h2>Stay in the loop</h2>
+  <p>Get notified about new releases, integrations, and orchestration tips. No spam.</p>
+  <form class="email-form" action="https://buttondown.com/api/emails/embed-subscribe/bernstein" method="post" target="popupwindow">
+    <input type="email" name="email" placeholder="you@company.com" required>
+    <button type="submit">Subscribe</button>
+  </form>
+  <p class="email-note">Unsubscribe anytime. We respect your inbox.</p>
+</div>
 
 <div class="cta-section">
   <h2>Start orchestrating in 30 seconds</h2>
