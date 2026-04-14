@@ -388,19 +388,44 @@ section {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: var(--space-6);
-  transition: border-color 0.15s ease-out;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
-.feature:hover { border-color: var(--border); }
+.feature::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+  transform: scaleX(0);
+  transition: transform 0.2s ease-out;
+}
+.feature:hover::before {
+  transform: scaleX(1);
+}
+.feature:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
 
 .feature-icon {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-subtle);
+  border-radius: 10px;
   margin-bottom: var(--space-4);
-  color: var(--text-muted);
+  color: var(--accent);
 }
 .feature-icon svg {
-  width: 100%;
-  height: 100%;
+  width: 20px;
+  height: 20px;
   stroke: currentColor;
   fill: none;
   stroke-width: 1.5;
@@ -457,6 +482,16 @@ section {
   transition: background 0.1s ease-out;
 }
 .compare-table tbody tr:hover { background: var(--surface-hover); }
+
+.compare-table thead th:nth-child(2) {
+  color: var(--accent);
+  position: relative;
+}
+.compare-table tbody td:nth-child(2) {
+  background: color-mix(in oklch, var(--accent) 5%, transparent);
+  font-weight: 500;
+  color: var(--text);
+}
 
 .check { color: var(--green); }
 .cross { color: var(--red); }
@@ -604,7 +639,30 @@ footer a:hover { color: var(--text-secondary); }
 
 /* ---- RESPONSIVE ---- */
 @media (max-width: 768px) {
-  .steps { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; 
+  .compare-table td:first-child,
+  .compare-table th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+  }
+  .compare-table tbody td:first-child {
+    background: var(--surface);
+  }
+  .compare-table thead th:first-child {
+    background: var(--code-bg);
+  }
+  .compare-table td:first-child::after,
+  .compare-table th:first-child::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -8px;
+    bottom: 0;
+    width: 8px;
+    background: linear-gradient(to right, oklch(0 0 0 / 0.15), transparent);
+  }
+}
   .features-grid { grid-template-columns: 1fr; }
   .agents-grid { grid-template-columns: repeat(2, 1fr); }
   .stats { gap: var(--space-7); }
