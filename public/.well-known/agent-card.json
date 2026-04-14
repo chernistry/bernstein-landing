@@ -1,0 +1,57 @@
+{
+  "name": "Bernstein",
+  "description": "Open-source multi-agent orchestration system for AI coding agents. Decomposes goals into tasks, spawns agents in parallel git worktrees, verifies output via quality gates, merges results.",
+  "provider": {
+    "organization": "Bernstein",
+    "url": "https://bernstein.run"
+  },
+  "url": "https://bernstein.run/api/a2a",
+  "version": "1.7.0",
+  "documentationUrl": "https://bernstein.readthedocs.io/",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "authentication": {
+    "schemes": []
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain"
+  ],
+  "skills": [
+    {
+      "id": "orchestrate",
+      "name": "Multi-Agent Orchestration",
+      "description": "Orchestrate multiple AI coding agents to work on a goal in parallel. Decomposes into tasks, assigns roles, manages git worktrees, runs quality gates.",
+      "tags": [
+        "orchestration",
+        "multi-agent",
+        "coding",
+        "automation"
+      ],
+      "examples": [
+        "Add JWT authentication with refresh tokens, tests, and API docs",
+        "Refactor the payment module to use Stripe webhooks",
+        "Fix all failing CI tests and update deprecated dependencies"
+      ]
+    },
+    {
+      "id": "plan",
+      "name": "Project Planning",
+      "description": "Decompose a project goal into a structured YAML plan with stages, steps, roles, priorities, and dependencies.",
+      "tags": [
+        "planning",
+        "decomposition",
+        "project-management"
+      ],
+      "examples": [
+        "Plan a migration from REST to GraphQL",
+        "Create a plan to add i18n support to the frontend"
+      ]
+    }
+  ]
+}

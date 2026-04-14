@@ -1,0 +1,44 @@
+{
+  "$schema": "https://agents-json.com/schema/v1",
+  "info": {
+    "title": "Bernstein API",
+    "version": "1.7.0",
+    "description": "Multi-agent orchestration system for AI coding agents"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8052",
+      "description": "Local task server"
+    }
+  ],
+  "flows": [
+    {
+      "name": "create-and-monitor-task",
+      "description": "Create a coding task and monitor its progress until completion",
+      "steps": [
+        {
+          "action": "POST /tasks",
+          "description": "Create a new task with a goal",
+          "input": {
+            "goal": "string",
+            "role": "string",
+            "priority": "number"
+          }
+        },
+        {
+          "action": "GET /status",
+          "description": "Check orchestration status and agent activity"
+        },
+        {
+          "action": "POST /tasks/{id}/complete",
+          "description": "Mark task as completed when verified"
+        }
+      ]
+    }
+  ],
+  "links": {
+    "documentation": "https://bernstein.readthedocs.io/",
+    "openapi": "https://bernstein.run/openapi.yaml",
+    "github": "https://github.com/chernistry/bernstein"
+  }
+}

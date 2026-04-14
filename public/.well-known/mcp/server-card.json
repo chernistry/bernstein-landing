@@ -1,0 +1,52 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/server-card/v1.0",
+  "version": "1.0",
+  "protocolVersion": "2025-06-18",
+  "serverInfo": {
+    "name": "Bernstein MCP Server",
+    "version": "1.7.0",
+    "description": "Multi-agent orchestration system for AI coding agents. Create tasks, monitor agents, check status, track costs via MCP tools.",
+    "homepage": "https://bernstein.run",
+    "documentation": "https://bernstein.readthedocs.io/",
+    "repository": "https://github.com/chernistry/bernstein"
+  },
+  "transport": {
+    "type": "streamable-http",
+    "url": "https://bernstein.run/mcp"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": false
+  },
+  "tools": [
+    {
+      "name": "bernstein_run",
+      "description": "Start an orchestration run with a goal"
+    },
+    {
+      "name": "bernstein_status",
+      "description": "Get current orchestration status"
+    },
+    {
+      "name": "bernstein_tasks",
+      "description": "List all tasks and their states"
+    },
+    {
+      "name": "bernstein_cost",
+      "description": "Get cost breakdown for current run"
+    },
+    {
+      "name": "bernstein_stop",
+      "description": "Stop the current orchestration"
+    },
+    {
+      "name": "bernstein_approve",
+      "description": "Approve a task that needs human review"
+    },
+    {
+      "name": "bernstein_health",
+      "description": "Check system health"
+    }
+  ]
+}
