@@ -1,31 +1,29 @@
-FROM nginx:alpine
+FROM node:20-alpine AS base
+WORKDIR /app
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN apk add --no-cache libc6-compat
 
-# Remove default nginx config
-RUN rm /etc/nginx/conf.d/default.conf
+FROM base AS deps
+COPY package.json package-lock.json* ./
+RUN npm ci --prefer-offline --no-audit --no-fund
 
-# Custom nginx config
-COPY nginx.conf /etc/nginx/conf.d/bernstein.conf
+FROM base AS builder
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
 
-# Main HTML pages
-COPY index.html /usr/share/nginx/html/index.html
-COPY 404.html /usr/share/nginx/html/404.html
-COPY og-image.html /usr/share/nginx/html/og-image.html
-
-# SEO files
-COPY robots.txt /usr/share/nginx/html/robots.txt
-COPY sitemap.xml /usr/share/nginx/html/sitemap.xml
-COPY humans.txt /usr/share/nginx/html/humans.txt
-COPY favicon.svg /usr/share/nginx/html/favicon.svg
-COPY manifest.json /usr/share/nginx/html/manifest.json
-COPY structured-data.json /usr/share/nginx/html/structured-data.json
-
-# AI/LLM discoverability files
-COPY llms.txt /usr/share/nginx/html/llms.txt
-COPY llms-full.txt /usr/share/nginx/html/llms-full.txt
-COPY ai.txt /usr/share/nginx/html/ai.txt
-
-# .well-known directory
-COPY .well-known/security.txt /usr/share/nginx/html/.well-known/security.txt
-COPY .well-known/ai-plugin.json /usr/share/nginx/html/.well-known/ai-plugin.json
-
-EXPOSE 80
+FROM base AS runner
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+RUN addgroup --system --gid 1001 nodejs \
+ && adduser --system --uid 1001 nextjs
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+USER nextjs
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD wget -q --spider "http://127.0.0.1:3000/" || exit 1
+CMD ["node", "server.js"]

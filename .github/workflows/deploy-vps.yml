@@ -55,7 +55,7 @@ jobs:
           set -euo pipefail
           ssh -i ~/.ssh/id_ed25519 -p "${VPS_DEPLOY_PORT:-22}" "${VPS_DEPLOY_USER}@${VPS_DEPLOY_HOST}" '
             set -euo pipefail
-            sleep 3
+            sleep 10
             if docker ps --filter name=bernstein-landing --format "{{.Status}}" | grep -q "Up"; then
               echo "Container is running"
             else
@@ -64,7 +64,7 @@ jobs:
               exit 1
             fi
             CONTAINER_IP=$(docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" bernstein-landing)
-            if curl -sf -o /dev/null "http://${CONTAINER_IP}:80"; then
+            if curl -sf -o /dev/null "http://${CONTAINER_IP}:3000"; then
               echo "Health check passed (container responding on port 80)"
             else
               echo "ERROR: Container is up but not responding to HTTP"

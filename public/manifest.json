@@ -1,0 +1,16 @@
+{
+  "name": "Bernstein",
+  "short_name": "Bernstein",
+  "description": "Open-source multi-agent orchestration system for AI coding agents",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0a0a0a",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
