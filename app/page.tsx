@@ -8,6 +8,7 @@ import { Features } from '@/components/landing/Features';
 import { Compare } from '@/components/landing/Compare';
 import { FooterCTA } from '@/components/landing/FooterCTA';
 import { Footer } from '@/components/landing/Footer';
+import { BackToTop } from '@/components/landing/BackToTop';
 
 const SOFTWARE_APP_JSON_LD = {
   '@context': 'https://schema.org',
@@ -121,6 +122,7 @@ export default function LandingPage() {
       </main>
       <FooterCTA />
       <Footer />
+      <BackToTop />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(SOFTWARE_APP_JSON_LD) }}

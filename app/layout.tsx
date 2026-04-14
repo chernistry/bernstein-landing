@@ -1,13 +1,17 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { inter, jetbrainsMono } from '@/lib/fonts';
 import '@/styles/globals.css';
 
 const SITE_URL = 'https://bernstein.run';
 
+export const viewport: Viewport = {
+  themeColor: '#131316',
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Bernstein — Multi-Agent Orchestration for CLI Coding Agents',
+    default: 'Bernstein \u2014 Multi-Agent Orchestration for CLI Coding Agents',
     template: '%s | Bernstein',
   },
   description:
@@ -26,14 +30,14 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: SITE_URL,
     siteName: 'Bernstein',
-    title: 'Bernstein — Multi-Agent Orchestration for CLI Coding Agents',
+    title: 'Bernstein \u2014 Multi-Agent Orchestration for CLI Coding Agents',
     description:
       'Run multiple AI coding agents in parallel on your codebase. Deterministic scheduling. Quality gates. Any model. One command.',
     images: [{ url: '/api/og', width: 1200, height: 630, alt: 'Bernstein' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Bernstein — Multi-Agent Orchestration for CLI Coding Agents',
+    title: 'Bernstein \u2014 Multi-Agent Orchestration for CLI Coding Agents',
     description:
       'Run multiple AI coding agents in parallel on your codebase. Deterministic scheduling. Quality gates. Any model. One command.',
     images: ['/api/og'],
@@ -41,6 +45,13 @@ export const metadata: Metadata = {
   icons: { icon: '/favicon.svg' },
   manifest: '/manifest.json',
   alternates: { canonical: SITE_URL },
+  other: {
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent',
+    'mobile-web-app-capable': 'yes',
+    'msapplication-TileColor': '#131316',
+    'format-detection': 'telephone=no',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
