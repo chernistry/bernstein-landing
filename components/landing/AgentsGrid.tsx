@@ -119,10 +119,10 @@ const agents: Agent[] = [
 
 export function AgentsGrid() {
   return (
-    <section id="agents">
+    <section id="agents" aria-labelledby="agents-heading">
       <ScrollReveal>
         <div className="section-header">
-          <h2>Works with every major coding agent <span className="agent-count">21</span></h2>
+          <h2 id="agents-heading">Works with every major coding agent <span className="agent-count">21</span></h2>
           <p>Mix local models for boilerplate with cloud models for architecture. In the same run.</p>
         </div>
       </ScrollReveal>

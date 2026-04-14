@@ -28,6 +28,7 @@ export function CopyButton({ text, className }: { text: string; className?: stri
         ref={btnRef}
         className={`copy-btn ${copied ? 'copied' : ''} ${className ?? ''}`}
         onClick={handleCopy}
+        aria-label={copied ? 'Copied to clipboard' : 'Copy to clipboard'}
       >
         {copied ? 'Copied!' : 'Copy'}
       </button>

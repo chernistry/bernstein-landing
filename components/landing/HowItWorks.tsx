@@ -22,10 +22,10 @@ export function HowItWorks() {
   ];
 
   return (
-    <section id="how">
+    <section id="how" aria-labelledby="how-heading">
       <ScrollReveal>
         <div className="section-header">
-          <h2>How it works</h2>
+          <h2 id="how-heading">How it works</h2>
           <p>Three steps. No babysitting.</p>
         </div>
       </ScrollReveal>

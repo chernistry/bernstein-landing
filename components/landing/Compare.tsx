@@ -35,15 +35,15 @@ function TableRowReveal({ children, delay }: { children: ReactNode; delay: numbe
 
 export function Compare() {
   return (
-    <section id="compare">
+    <section id="compare" aria-labelledby="compare-heading">
       <ScrollReveal>
         <div className="section-header">
-          <h2>How it compares</h2>
+          <h2 id="compare-heading">How it compares</h2>
           <p>Different category, different architecture.</p>
         </div>
       </ScrollReveal>
       <ScrollReveal delay={200}>
-        <div className="table-wrap">
+        <div className="table-wrap" tabIndex={0} role="region" aria-label="Comparison table, scroll horizontally">
           <table className="compare-table" role="table" aria-label="Feature comparison between orchestration tools">
             <thead>
               <tr>
