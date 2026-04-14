@@ -17,8 +17,8 @@ export function Features() {
           <div className="feature-icon">
             <svg viewBox="0 0 24 24"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
           </div>
-          <h3>29 agent adapters</h3>
-          <p>Claude Code, Codex, Gemini CLI, Aider, and 25 more. Mix models in one run. Switch providers without changing config.</p>
+          <h3>21 agent adapters</h3>
+          <p>Claude Code, Codex, Gemini CLI, Aider, Cloudflare Agents, and 16 more. Mix models in one run. Switch providers without changing config.</p>
         </div>
         <div className="feature">
           <div className="feature-icon">
@@ -47,6 +47,20 @@ export function Features() {
           </div>
           <h3>Full observability</h3>
           <p>Per-agent cost tracking, token monitoring, quality trends, Prometheus metrics. Know what happened and what it cost.</p>
+        </div>
+        <div className="feature">
+          <div className="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M19.35 10.04A7.49 7.49 0 0012 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 000 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+          </div>
+          <h3>Cloudflare cloud execution</h3>
+          <p>Run agents on Cloudflare Workers with Durable Workflows, V8 sandbox isolation, R2 workspace sync, and Workers AI routing.</p>
+        </div>
+        <div className="feature">
+          <div className="feature-icon">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+          </div>
+          <h3>MCP remote transport</h3>
+          <p>Expose Bernstein as an MCP server over HTTP. Connect from any MCP client, run orchestration remotely.</p>
         </div>
       </div>
     </section>
