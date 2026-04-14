@@ -1409,3 +1409,15 @@ footer {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* FAQ */
+.faq { max-width: var(--max-w, 1080px); margin: 0 auto; padding: var(--space-10) var(--space-5); }
+.faq .section-header { text-align: center; margin-bottom: var(--space-8); }
+.faq-list { display: flex; flex-direction: column; gap: var(--space-3); }
+.faq-item { background: var(--surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; }
+.faq-question { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: var(--space-5); background: none; border: none; color: var(--text); font: inherit; font-weight: 600; font-size: 1rem; cursor: pointer; text-align: left; }
+.faq-question:hover { background: var(--surface-hover); }
+.faq-chevron { transition: transform 0.2s; color: var(--text-muted); }
+.faq-item--open .faq-chevron { transform: rotate(180deg); }
+.faq-answer { padding: 0 var(--space-5) var(--space-5); color: var(--text-secondary); line-height: 1.7; }
+.faq-answer code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.9em; }

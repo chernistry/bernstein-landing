@@ -6,6 +6,7 @@ import { EmailCapture } from '@/components/landing/EmailCapture';
 import { AgentsGrid } from '@/components/landing/AgentsGrid';
 import { Features } from '@/components/landing/Features';
 import { Compare } from '@/components/landing/Compare';
+import { FAQ } from '@/components/landing/FAQ';
 import { FooterCTA } from '@/components/landing/FooterCTA';
 import { Footer } from '@/components/landing/Footer';
 import { BackToTop } from '@/components/landing/BackToTop';
@@ -65,7 +66,7 @@ const FAQ_JSON_LD = {
       name: 'How do I install Bernstein?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Install Bernstein with pipx: 'pipx install bernstein'. You can also use pip or uv. Requires Python 3.12+ and at least one supported CLI coding agent.",
+        text: 'Install with pipx install bernstein (recommended), or use pip install bernstein or uv pip install bernstein. Homebrew support is coming soon. Requires Python 3.12+ and at least one supported CLI coding agent installed.',
       },
     },
     {
@@ -73,7 +74,7 @@ const FAQ_JSON_LD = {
       name: 'What AI coding agents does Bernstein support?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Bernstein supports 21 agents including Claude Code, Codex CLI, Gemini CLI, Cursor, Aider, Amp, Roo Code, Kiro, Qwen, Goose, Ollama, and more. It also has a generic adapter for wrapping any CLI tool.',
+        text: 'Bernstein ships 21 adapters: Claude Code, Codex CLI, Gemini CLI, Cursor, Aider, Amp, Roo Code, Kiro, Qwen, Goose, Cody, Continue, Kilo, OpenCode, Tabby, Ollama, and more. A generic adapter lets you wrap any CLI tool.',
       },
     },
     {
@@ -81,7 +82,15 @@ const FAQ_JSON_LD = {
       name: 'How does Bernstein differ from CrewAI or AutoGen?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Bernstein's orchestrator is deterministic Python code \u2014 no LLM tokens are spent on coordination. It works with real CLI coding agents, provides git worktree isolation, runs quality gates on every result, and includes cost tracking. CrewAI and AutoGen use LLM-driven coordination and don't support CLI agents.",
+        text: "Bernstein\u2019s orchestrator is deterministic Python code \u2014 zero LLM tokens spent on coordination. It works with real CLI coding agents (not toy wrappers), provides git worktree isolation per agent, runs quality gates on every output, tracks costs, and uses an epsilon-greedy bandit to route tasks to the best model. CrewAI and AutoGen use LLM-driven coordination and don\u2019t support CLI agents.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can Bernstein run agents in the cloud?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Bernstein includes a Cloudflare Workers integration with Durable Workflows for long-running orchestration, V8 isolate sandboxes for agent execution, R2 storage for artifacts, and KV for state. You can also run it on any server with SSH access.',
       },
     },
     {
@@ -89,7 +98,39 @@ const FAQ_JSON_LD = {
       name: 'Is Bernstein free?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. Bernstein is open-source under the Apache 2.0 license. You only pay for the AI model API usage of the agents themselves.',
+        text: 'Yes. Bernstein is open-source under the Apache 2.0 license. You only pay for the AI model API usage of the agents themselves (e.g. your Anthropic or OpenAI API key).',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the Bernstein task server API?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Bernstein runs a local REST API on port 8052. Endpoints include POST /tasks (create), GET /tasks?status=open (list), POST /tasks/{id}/complete, POST /tasks/{id}/fail, POST /bulletin (cross-agent findings), and GET /status (dashboard). Agents use this API to coordinate without direct communication.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does Bernstein support MCP?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Bernstein exposes an MCP (Model Context Protocol) server that lets any MCP-compatible client control orchestration \u2014 create tasks, check status, approve merges, and monitor costs through standard MCP tool calls.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How does quality verification work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Quality gates run automatically on every agent output before merge. They execute lint (Ruff), type checking (Pyright), tests (pytest), and security scans. A cross-model verifier can optionally have a second model review the diff. Only outputs that pass all gates get merged to the target branch.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What models does Bernstein use for task routing?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Bernstein routes tasks to the optimal model based on complexity: Opus for architecture and hard problems, Sonnet for standard implementation, Haiku for tests and boilerplate. An epsilon-greedy contextual bandit learns which model performs best for each task type over time.',
       },
     },
   ],
@@ -119,6 +160,7 @@ export default function LandingPage() {
         <AgentsGrid />
         <Features />
         <Compare />
+        <FAQ />
       </main>
       <FooterCTA />
       <Footer />
