@@ -1,9 +1,11 @@
 import { CopyButton } from '@/components/CopyButton';
+import { HeroBackground } from './HeroBackground';
 
 export function Hero() {
   return (
     <div className="hero">
-      <h1>Orchestrate parallel AI&nbsp;agents on your codebase</h1>
+      <HeroBackground />
+      <h1>Orchestrate <span className="gradient-text">parallel</span> AI&nbsp;agents on your codebase</h1>
       <p className="hero-sub">
         Run Claude Code, Codex, and Gemini CLI simultaneously.
         Deterministic scheduling, quality gates, cost tracking.
@@ -17,7 +19,7 @@ export function Hero() {
         <a href="https://bernstein.readthedocs.io/" className="btn btn-secondary">Documentation</a>
       </div>
       <div className="install-block">
-        <div className="install-code"><span className="prompt">$</span> <span className="cmd">pipx install bernstein</span></div>
+        <div className="install-code"><span className="prompt">$</span> <span className="cmd">pipx install bernstein</span><span className="cursor" /></div>
         <CopyButton text="pipx install bernstein" />
       </div>
     </div>
