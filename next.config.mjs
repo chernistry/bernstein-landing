@@ -30,7 +30,7 @@ const nextConfig = {
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=()' },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://app.kit.com https://pypistats.org; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://app.kit.com;",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://app.kit.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://app.kit.com;",
           },
           {
             key: 'X-Robots-Tag',

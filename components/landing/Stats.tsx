@@ -20,12 +20,15 @@ interface AnimatedNumberProps {
   target: number;
   suffix?: string;
   format?: 'k' | 'comma' | 'plain';
+  ready?: boolean;
 }
 
-function AnimatedNumber({ target, suffix = '', format = 'plain' }: AnimatedNumberProps) {
+function AnimatedNumber({ target, suffix = '', format = 'plain', ready = true }: AnimatedNumberProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const [display, setDisplay] = useState(formatNumber(0, format) + suffix);
   const hasAnimated = useRef(false);
+  const readyRef = useRef(ready);
+  readyRef.current = ready;
 
   const animate = useCallback(() => {
     const duration = 1200;
@@ -47,7 +50,7 @@ function AnimatedNumber({ target, suffix = '', format = 'plain' }: AnimatedNumbe
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || !ready) return;
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setDisplay(formatNumber(target, format) + suffix);
@@ -56,7 +59,7 @@ function AnimatedNumber({ target, suffix = '', format = 'plain' }: AnimatedNumbe
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated.current) {
+        if (entry.isIntersecting && !hasAnimated.current && readyRef.current) {
           hasAnimated.current = true;
           animate();
           observer.disconnect();
@@ -66,32 +69,50 @@ function AnimatedNumber({ target, suffix = '', format = 'plain' }: AnimatedNumbe
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [target, suffix, format, animate]);
+  }, [target, suffix, format, animate, ready]);
 
   return <span ref={ref}>{display}</span>;
 }
 
-const FALLBACK_DOWNLOADS = 8600;
-
 export function Stats() {
-  const [downloads, setDownloads] = useState(FALLBACK_DOWNLOADS);
+  const [downloads, setDownloads] = useState(0);
+  const [stars, setStars] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    fetch('https://pypistats.org/api/packages/bernstein/recent')
+    const timeout = setTimeout(() => {
+      // Fallback if API is too slow
+      if (!loaded) {
+        setDownloads(9200);
+        setStars(110);
+        setLoaded(true);
+      }
+    }, 3000);
+
+    fetch('/api/stats')
       .then((r) => r.ok ? r.json() : null)
       .then((data) => {
-        if (data?.data?.last_month) {
-          setDownloads(data.data.last_month);
+        if (data) {
+          setDownloads(data.monthly_downloads);
+          setStars(data.stars);
+          setLoaded(true);
+          clearTimeout(timeout);
         }
       })
-      .catch(() => {});
-  }, []);
+      .catch(() => {
+        setDownloads(9200);
+        setStars(110);
+        setLoaded(true);
+      });
+
+    return () => clearTimeout(timeout);
+  }, [loaded]);
 
   return (
     <div className="stats">
       <div className="stat">
         <div className="stat-num">
-          <AnimatedNumber target={110} suffix="+" />
+          <AnimatedNumber target={stars} suffix="+" ready={loaded} />
         </div>
         <div className="stat-label">GitHub stars</div>
       </div>
@@ -102,19 +123,19 @@ export function Stats() {
         className="stat stat-link"
       >
         <div className="stat-num">
-          <AnimatedNumber target={downloads} format="comma" />
+          <AnimatedNumber target={downloads} format="comma" ready={loaded} />
         </div>
         <div className="stat-label">Monthly downloads</div>
       </a>
       <div className="stat">
         <div className="stat-num">
-          <AnimatedNumber target={21} />
+          <AnimatedNumber target={21} ready={loaded} />
         </div>
         <div className="stat-label">Agent adapters</div>
       </div>
       <div className="stat">
         <div className="stat-num">
-          <AnimatedNumber target={2600} suffix="+" format="comma" />
+          <AnimatedNumber target={2600} suffix="+" format="comma" ready={loaded} />
         </div>
         <div className="stat-label">Tests passing</div>
       </div>
