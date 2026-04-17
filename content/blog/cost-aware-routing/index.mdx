@@ -1,12 +1,12 @@
 ---
-title: "How Bernstein Routes Tasks to the Right Model (and Saves 50-60%)"
-description: "Bernstein's epsilon-greedy bandit router learns which model fits each task type, cutting agent costs by 50-60% without sacrificing quality."
+title: "How Bernstein Routes Tasks to the Right Model"
+description: "Bernstein's epsilon-greedy bandit router learns which model fits each task type. In our own runs, the bandit cut spend roughly in half. Measure yours with bernstein cost."
 date: "2026-04-07"
 tags: ["AI cost optimization", "model routing", "contextual bandit", "multi-agent orchestration", "LLM cost reduction"]
 ---
 
 <Lead>
-Not every coding task needs Opus. Bernstein's contextual bandit router learns which model handles each task type best, then routes accordingly. Early results show 50-60% cost savings compared to uniform model selection.
+Not every coding task needs Opus. Bernstein's contextual bandit router learns which model handles each task type best, then routes accordingly. In our own runs, the bandit router cut spend roughly in half compared to uniform model selection. Measure yours with bernstein cost.
 </Lead>
 
 ## The uniform selection problem
@@ -68,7 +68,7 @@ routing:
 
 ## The numbers
 
-Across our internal runs (self-development sessions where Bernstein improves its own codebase), the bandit router reduced per-session costs by 53% compared to the baseline of Sonnet-for-everything. Task completion rates stayed within 2% — the cheaper models handle their assigned tasks just fine.
+Across our internal runs (self-development sessions where Bernstein improves its own codebase), the bandit router cut per-session spend roughly in half compared to the baseline of Sonnet-for-everything. Task completion rates stayed within a couple of percentage points, so cheaper models handle their assigned tasks fine. Measure your own runs with `bernstein cost`.
 
 The savings compound. A 10-agent session running 50 tasks might cost $15-20 with uniform Sonnet. With bandit routing, the same session runs $7-10. Over weeks of iterative development, that's the difference between a side project budget and a real expense.
 

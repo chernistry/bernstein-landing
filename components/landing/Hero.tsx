@@ -23,7 +23,7 @@ export function Hero() {
         <CopyButton text="pipx install bernstein" />
       </div>
       <a
-        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('Bernstein — open-source multi-agent orchestration for CLI coding agents')}&url=${encodeURIComponent('https://bernstein.run')}`}
+        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('Bernstein: open-source multi-agent orchestration for CLI coding agents')}&url=${encodeURIComponent('https://bernstein.run')}`}
         target="_blank"
         rel="noopener noreferrer"
         className="hero-share"

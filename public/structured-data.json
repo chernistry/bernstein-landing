@@ -5,14 +5,14 @@
       "@type": "SoftwareApplication",
       "@id": "https://bernstein.run/#software",
       "name": "Bernstein",
-      "description": "Open-source multi-agent orchestration system for AI coding agents. Coordinates Claude Code, Codex, Gemini CLI, and 20 other agents to work in parallel using deterministic scheduling, git worktree isolation, and quality gates.",
+      "description": "Open-source multi-agent orchestration system for AI coding agents. Coordinates Claude Code, Codex, Gemini CLI, and 14 other agents to work in parallel using deterministic scheduling, git worktree isolation, and quality gates.",
       "url": "https://bernstein.run",
       "applicationCategory": "DeveloperApplication",
       "applicationSubCategory": "Multi-Agent Orchestration",
       "operatingSystem": "macOS, Linux, Windows",
       "programmingLanguage": "Python",
       "runtimePlatform": "Python 3.12+",
-      "softwareVersion": "1.6",
+      "softwareVersion": "1.8.4",
       "license": "https://www.apache.org/licenses/LICENSE-2.0",
       "isAccessibleForFree": true,
       "offers": {
@@ -34,7 +34,7 @@
       "softwareRequirements": "Python 3.12+, Git",
       "featureList": [
         "Deterministic scheduling (no LLM-based coordination)",
-        "21 agent adapters (Claude Code, Codex, Gemini CLI, etc.)",
+        "17 agent adapters (Claude Code, Codex, Gemini CLI, etc.)",
         "Git worktree isolation per agent",
         "Quality gates (lint, types, tests, security)",
         "Cost-aware contextual bandit routing",
@@ -122,7 +122,7 @@
           "name": "What AI coding agents does Bernstein support?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Bernstein supports 21 agents including Claude Code, Codex CLI, Gemini CLI, Cursor, Aider, Amp, Roo Code, Kiro, Qwen, Goose, Ollama, Cody, Continue, OpenCode, Tabby, and more. It also has a generic adapter for wrapping any CLI tool."
+            "text": "Bernstein supports 17 agents including Claude Code, Codex CLI, Gemini CLI, Cursor, Aider, Amp, Kiro, Kilo, Qwen, Goose, Ollama, Cody, Continue, OpenCode, Cloudflare Agents, IaC, and a generic adapter for wrapping any CLI tool."
           }
         },
         {
@@ -162,7 +162,7 @@
           "name": "How does cost tracking work in Bernstein?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Bernstein tracks costs per-agent, per-model, per-task, and per-run. It uses a contextual bandit router to learn which model works best for each task type, saving 50-60% compared to uniformly using expensive models. You can set hard budget limits, alert thresholds, and automatic drain mode when budget is exhausted."
+            "text": "Bernstein tracks costs per-agent, per-model, per-task, and per-run. It uses a contextual bandit router to learn which model works best for each task type. In our own runs, spend dropped roughly in half compared to uniformly using expensive models. You can set hard budget limits, alert thresholds, and automatic drain mode when budget is exhausted."
           }
         }
       ]

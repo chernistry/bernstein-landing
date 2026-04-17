@@ -3,7 +3,7 @@
   "name_for_human": "Bernstein",
   "name_for_model": "bernstein",
   "description_for_human": "Open-source multi-agent orchestration system for AI coding agents. Run Claude Code, Codex, Gemini CLI in parallel.",
-  "description_for_model": "Bernstein is an open-source multi-agent orchestration system for AI coding agents. It takes a goal, decomposes it into tasks, assigns them to AI coding agents (Claude Code, Codex, Gemini CLI, etc.) running in parallel in isolated git worktrees, verifies output via quality gates (lint, types, tests, security), and merges results. The orchestrator is deterministic Python code — no LLM tokens are spent on coordination. It supports 21 agent adapters, contextual bandit model routing, cost tracking, MCP server mode, and A2A protocol. Install: pipx install bernstein. License: Apache 2.0.",
+  "description_for_model": "Bernstein is an open-source multi-agent orchestration system for AI coding agents. It takes a goal, decomposes it into tasks, assigns them to AI coding agents (Claude Code, Codex, Gemini CLI, etc.) running in parallel in isolated git worktrees, verifies output via quality gates (lint, types, tests, security), and merges results. The orchestrator is deterministic Python code. No LLM tokens are spent on coordination. It supports 17 agent adapters, contextual bandit model routing, cost tracking, MCP server mode, and A2A protocol. Install: pipx install bernstein. License: Apache 2.0.",
   "auth": {
     "type": "none"
   },

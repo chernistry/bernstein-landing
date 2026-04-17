@@ -90,7 +90,7 @@ export async function GET(request: NextRequest) {
                 color: '#c0c0d0',
               }}
             >
-              <span style={{ color: '#ffcc00' }}>&#9733;</span> 110+ stars
+              <span style={{ color: '#ffcc00' }}>&#9733;</span> 125+ stars
             </div>
             <div
               style={{
@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
                 color: '#c0c0d0',
               }}
             >
-              21 adapters
+              17 adapters
             </div>
           </div>
         </div>
@@ -114,6 +114,8 @@ export async function GET(request: NextRequest) {
         <div style={{ display: 'flex', flexDirection: 'column', zIndex: 1, flex: 1, justifyContent: 'center' }}>
           <div
             style={{
+              display: 'flex',
+              flexWrap: 'wrap',
               fontSize: isDefault ? 56 : 48,
               fontWeight: 700,
               letterSpacing: '-0.03em',
@@ -121,17 +123,12 @@ export async function GET(request: NextRequest) {
               maxWidth: '900px',
             }}
           >
-            {isDefault ? (
-              <>
-                Orchestrate parallel AI{' '}
-                <span style={{ color: '#8888cc' }}>agents</span> on your codebase
-              </>
-            ) : (
-              title
-            )}
+            {isDefault
+              ? 'Orchestrate parallel AI agents on your codebase'
+              : title}
           </div>
           {isDefault && (
-            <div style={{ fontSize: 20, color: '#6e6e80', marginTop: 20, maxWidth: '700px', lineHeight: 1.5 }}>
+            <div style={{ display: 'flex', fontSize: 20, color: '#6e6e80', marginTop: 20, maxWidth: '700px', lineHeight: 1.5 }}>
               Run Claude Code, Codex, and Gemini CLI simultaneously. Deterministic scheduling. Quality gates. Any model.
             </div>
           )}

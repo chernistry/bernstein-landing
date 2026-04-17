@@ -5,8 +5,7 @@
     "organization": "Bernstein",
     "url": "https://bernstein.run"
   },
-  "url": "https://bernstein.run/api/a2a",
-  "version": "1.7.0",
+  "version": "1.8.4",
   "documentationUrl": "https://bernstein.readthedocs.io/",
   "capabilities": {
     "streaming": false,

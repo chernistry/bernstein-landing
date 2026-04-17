@@ -19,7 +19,7 @@ We hit this ceiling hard. I wrote about the 47-hour stress test that led to this
 
 **Deterministic scheduling, not LLM-based planning.** The orchestrator is pure Python code — no LLM in the scheduling loop. Tasks are decomposed from YAML plans or created via the API, then assigned based on role, priority, and dependency graphs. The scheduler is predictable and debuggable.
 
-**Any CLI agent.** Bernstein ships with 21 adapters: Claude Code, Codex, Gemini CLI, Aider, Cursor, Amp, Roo Code, Kiro, Qwen, Goose, and more. If your agent has a CLI, you can write an adapter in under 100 lines. Agents are treated as interchangeable workers, not special snowflakes.
+**Any CLI agent.** Bernstein ships with 17 adapters: Claude Code, Codex, Gemini CLI, Aider, Cursor, Amp, Kiro, Kilo, Qwen, Goose, and more. If your agent has a CLI, you can write an adapter in under 100 lines. Agents are treated as interchangeable workers, not special snowflakes.
 
 **Git isolation by default.** Each agent gets its own git worktree. No merge conflicts during execution. When an agent completes a task, Bernstein merges its worktree back through a merge queue. Failed tasks get rolled back cleanly.
 

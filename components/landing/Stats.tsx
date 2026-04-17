@@ -83,8 +83,8 @@ export function Stats() {
     const timeout = setTimeout(() => {
       // Fallback if API is too slow
       if (!loaded) {
-        setDownloads(9200);
-        setStars(110);
+        setDownloads(9500);
+        setStars(125);
         setLoaded(true);
       }
     }, 3000);
@@ -100,8 +100,8 @@ export function Stats() {
         }
       })
       .catch(() => {
-        setDownloads(9200);
-        setStars(110);
+        setDownloads(9500);
+        setStars(125);
         setLoaded(true);
       });
 
@@ -129,15 +129,15 @@ export function Stats() {
       </a>
       <div className="stat">
         <div className="stat-num">
-          <AnimatedNumber target={21} ready={loaded} />
+          <AnimatedNumber target={17} ready={loaded} />
         </div>
         <div className="stat-label">Agent adapters</div>
       </div>
       <div className="stat">
         <div className="stat-num">
-          <AnimatedNumber target={2600} suffix="+" format="comma" ready={loaded} />
+          <AnimatedNumber target={1048} format="comma" ready={loaded} />
         </div>
-        <div className="stat-label">Tests passing</div>
+        <div className="stat-label">Test files</div>
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "What AI coding agents does Bernstein support?",
     answer:
-      "Bernstein ships 21 adapters: Claude Code, Codex CLI, Gemini CLI, Cursor, Aider, Amp, Roo Code, Kiro, Qwen, Goose, Cody, Continue, Kilo, OpenCode, Tabby, Ollama, and more. A generic adapter lets you wrap any CLI tool.",
+      "Bernstein ships 17 adapters: Claude Code, Codex CLI, Gemini CLI, Cursor, Aider, Amp, Kiro, Kilo, Qwen, Goose, Cody, Continue, OpenCode, Ollama, Cloudflare Agents, IaC, and a Generic adapter that wraps any CLI tool.",
   },
   {
     question: "How does Bernstein differ from CrewAI or AutoGen?",

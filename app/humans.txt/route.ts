@@ -7,7 +7,7 @@ export function GET() {
     'Location: Europe',
     '',
     '/* THANKS */',
-    'Bernstein orchestrates: Claude Code, Codex CLI, Gemini CLI, and 18 more agents',
+    'Bernstein orchestrates: Claude Code, Codex CLI, Gemini CLI, and 14 more agents',
     '',
     '/* SITE */',
     'Standards: HTML5, CSS3, TypeScript',
@@ -18,7 +18,7 @@ export function GET() {
     'Email: Kit (ConvertKit)',
     'Design: OKLCH color space, Inter + JetBrains Mono',
     'Build: Node.js 20, standalone Docker output',
-    'Last updated: 2026-04-14',
+    'Last updated: 2026-04-17',
     '',
   ].join('\n');
 

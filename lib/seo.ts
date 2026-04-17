@@ -44,7 +44,7 @@ export async function buildLlmsTxt(): Promise<string> {
 
   return `# Bernstein
 
-> Open-source multi-agent orchestration system for AI coding agents. Decomposes goals into parallel tasks, routes to optimal models, verifies via quality gates, merges results. 21 adapters, Cloudflare cloud execution, deterministic Python scheduling. Apache 2.0.
+> Open-source multi-agent orchestration system for AI coding agents. Decomposes goals into parallel tasks, routes to optimal models, verifies via quality gates, merges results. 17 adapters, Cloudflare cloud execution, deterministic Python scheduling. Apache 2.0.
 
 ## Docs
 

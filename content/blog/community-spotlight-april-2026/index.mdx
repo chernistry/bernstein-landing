@@ -1,36 +1,35 @@
 ---
 title: "Community Spotlight: April 2026"
-description: "First community spotlight — highlighting contributors who shaped Bernstein's architecture decomposition, adapter ecosystem, and cost-aware routing in April 2026."
+description: "First community spotlight highlighting contributors who shaped Bernstein's architecture decomposition, adapter ecosystem, and cost-aware routing in April 2026."
 date: "2026-04-14"
 tags: ["community", "open-source", "contributors", "multi-agent orchestration"]
 ---
 
 <Lead>
-Every month we spotlight the people who make Bernstein better. Here are April's highlights — the first month of public development.
+Every month we spotlight the people who make Bernstein better. Here are April's highlights from the first month of public development.
 </Lead>
 
 ## What happened in April
 
-Bernstein went from v1.0.0 to v1.7.3 in two weeks. The pace was intense, and community contributions made a real difference:
+Bernstein went from v1.0.0 to v1.8.4 in two weeks. The pace was intense, and community contributions made a real difference:
 
-- **Architecture decomposition** — 52 oversized modules broken into 15 focused sub-packages, each under 600 lines. The orchestrator monolith (4,198 lines) is now navigable, testable, and merge-conflict-free. [Read the full story](/blog/module-decomposition).
-- **21 agent adapters** — We started with 7 adapters and now support 21: Claude Code, Codex, Gemini CLI, Cursor, Aider, Amp, Roo Code, Kiro, Qwen, Goose, Ollama, and more. Each adapter is a focused Python class under 200 lines.
-- **Cost-aware routing** — The [contextual bandit router](/blog/cost-aware-routing) learns which model handles each task type best. Early results show 50-60% cost savings compared to sending everything to the same model.
-- **Cloudflare cloud execution** — Agents can now [run on Cloudflare Workers](/blog/cloudflare-cloud-execution) with Durable Workflows, R2 artifact storage, and D1 state.
-- **Windows support** — Full cross-platform compatibility contributed by [@oldschoola](https://github.com/oldschoola): environment passthrough, Unicode safety, process management, and terminal handling.
+- **Architecture decomposition**: 52 oversized modules broken into 22 focused sub-packages, each under 600 lines. The orchestrator monolith (4,198 lines) is now navigable, testable, and merge-conflict-free. [Read the full story](/blog/module-decomposition).
+- **17 agent adapters**: We started with 7 adapters and now support 17: Claude Code, Codex, Gemini CLI, Cursor, Aider, Amp, Kiro, Kilo, Qwen, Goose, Ollama, Cody, Continue, OpenCode, Cloudflare Agents, IaC, and a generic wrapper. Each adapter is a focused Python class under 200 lines.
+- **Cost-aware routing**: The [contextual bandit router](/blog/cost-aware-routing) learns which model handles each task type best. In our own runs, the bandit cut spend roughly in half compared to sending everything to the same model.
+- **Cloudflare cloud execution**: Agents can now [run on Cloudflare Workers](/blog/cloudflare-cloud-execution) with Durable Workflows, R2 artifact storage, and D1 state.
+- **Windows support**: Full cross-platform compatibility contributed by [@oldschoola](https://github.com/oldschoola): environment passthrough, Unicode safety, process management, and terminal handling.
 
 ## Contributors
 
 Thanks to everyone who contributed PRs, reported bugs, and tested edge cases this month:
 
-- [@oldschoola](https://github.com/oldschoola) — Windows compatibility (8 PRs), codex config, task filtering, auto-PR
-- [@vbhavh](https://github.com/vbhavh) — cost-per-line efficiency metric
-- [@Ai-chan-0411](https://github.com/Ai-chan-0411) — community spotlight template
-- [@alexanderxfgl-bit](https://github.com/alexanderxfgl-bit) — spotlight generator script
-- [@forfreedomforrich-eng](https://github.com/forfreedomforrich-eng) — `--dry-run` flag, trigger URL fix
-- [@TheCodingDragon0](https://github.com/TheCodingDragon0) — `bernstein config diff`, glossary
-- [@internet-dot](https://github.com/internet-dot) — HOL workflow
-- [@Beledarian](https://github.com/Beledarian) — config path validation
+- [@oldschoola](https://github.com/oldschoola): Windows compatibility (3 merged PRs), codex config, task filtering, auto-PR
+- [@Ai-chan-0411](https://github.com/Ai-chan-0411): community spotlight template
+- [@alexanderxfgl-bit](https://github.com/alexanderxfgl-bit): spotlight generator script
+- [@forfreedomforrich-eng](https://github.com/forfreedomforrich-eng): `--dry-run` flag, trigger URL fix
+- [@TheCodingDragon0](https://github.com/TheCodingDragon0): `bernstein config diff`, glossary
+- [@internet-dot](https://github.com/internet-dot): HOL workflow
+- [@Beledarian](https://github.com/Beledarian): config path validation
 
 All contributors are listed in [CONTRIBUTORS.md](https://github.com/chernistry/bernstein/blob/main/CONTRIBUTORS.md).
 
@@ -38,7 +37,7 @@ All contributors are listed in [CONTRIBUTORS.md](https://github.com/chernistry/b
 
 Bernstein is Apache 2.0 and welcomes contributions of all sizes:
 
-- [Good first issues](https://github.com/chernistry/bernstein/labels/good%20first%20issue) — curated tasks for newcomers
-- [Write a blog post](https://github.com/chernistry/bernstein/issues/786) — get published on bernstein.run
-- [Adopt an adapter](https://github.com/chernistry/bernstein/issues/775) — become the maintainer for your favorite agent
-- [Submit benchmarks](https://github.com/chernistry/bernstein/issues/787) — share your orchestration metrics
+- [Good first issues](https://github.com/chernistry/bernstein/labels/good%20first%20issue): curated tasks for newcomers
+- [Write a blog post](https://github.com/chernistry/bernstein/issues/786): get published on bernstein.run
+- [Adopt an adapter](https://github.com/chernistry/bernstein/issues/775): become the maintainer for your favorite agent
+- [Submit benchmarks](https://github.com/chernistry/bernstein/issues/787): share your orchestration metrics

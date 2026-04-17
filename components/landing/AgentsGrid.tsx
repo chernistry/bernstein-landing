@@ -12,7 +12,7 @@ interface Agent {
 
 const agents: Agent[] = [
   {
-    name: 'Claude Code', models: 'Opus, Sonnet, Haiku', category: 'CLI',
+    name: 'Claude Code', models: 'Opus 4.7, Sonnet 4.6, Haiku 4.5', category: 'CLI',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="10" cy="6" r="2" /><path d="M10 8v4" /><path d="M7 16l3-4 3 4" /><path d="M6 12c-2 0-3-1-3-2" /><path d="M14 12c2 0 3-1 3-2" />
@@ -20,7 +20,7 @@ const agents: Agent[] = [
     ),
   },
   {
-    name: 'Codex CLI', models: 'GPT-5.4, GPT-5.4-mini', category: 'CLI',
+    name: 'Codex CLI', models: 'GPT-5 family', category: 'CLI',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 10l4-4M4 10l4 4" /><path d="M11 14h5" />
@@ -28,7 +28,7 @@ const agents: Agent[] = [
     ),
   },
   {
-    name: 'Gemini CLI', models: 'Gemini 3.1 Pro, 3 Flash', category: 'CLI',
+    name: 'Gemini CLI', models: 'Gemini 2.5 Pro', category: 'CLI',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="8" cy="10" r="5" /><circle cx="12" cy="10" r="5" />
@@ -72,14 +72,6 @@ const agents: Agent[] = [
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M7 5c0-2 3-3 4-1s0 4-1 5c2 1 4 3 4 5v2H6v-2c0-2 1-3 2-4" /><circle cx="10" cy="5" r="1" />
-      </svg>
-    ),
-  },
-  {
-    name: 'Roo Code', models: 'VS Code extension CLI', category: 'Editor',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M5 7l-3 3 3 3" /><path d="M15 7l3 3-3 3" /><path d="M12 5l-4 10" />
       </svg>
     ),
   },
@@ -132,6 +124,22 @@ const agents: Agent[] = [
     ),
   },
   {
+    name: 'Kilo', models: 'Any OpenAI-compatible', category: 'CLI',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M5 4v12" /><path d="M5 10l8-6v12z" />
+      </svg>
+    ),
+  },
+  {
+    name: 'IaC', models: 'Terraform, Pulumi', category: 'Infra',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="10" width="4" height="7" /><rect x="8" y="5" width="4" height="12" /><rect x="13" y="8" width="4" height="9" />
+      </svg>
+    ),
+  },
+  {
     name: 'Generic', models: 'Any CLI agent', category: 'Adapter',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -146,7 +154,7 @@ export function AgentsGrid() {
     <section id="agents" aria-labelledby="agents-heading">
       <ScrollReveal>
         <div className="section-header">
-          <h2 id="agents-heading">Works with every major coding agent <span className="agent-count">21</span></h2>
+          <h2 id="agents-heading">Works with every major coding agent <span className="agent-count">17</span></h2>
           <p>Mix local models for boilerplate with cloud models for architecture. In the same run.</p>
         </div>
       </ScrollReveal>
@@ -169,7 +177,7 @@ export function AgentsGrid() {
       <ScrollReveal delay={800}>
         <div className="agents-more-wrap">
           <a href="https://bernstein.readthedocs.io/" className="agents-more">
-            View all 21 adapters and configuration &rarr;
+            View all 17 adapters and configuration &rarr;
           </a>
         </div>
       </ScrollReveal>

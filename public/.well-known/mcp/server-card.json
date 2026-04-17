@@ -4,15 +4,11 @@
   "protocolVersion": "2025-06-18",
   "serverInfo": {
     "name": "Bernstein MCP Server",
-    "version": "1.7.0",
-    "description": "Multi-agent orchestration system for AI coding agents. Create tasks, monitor agents, check status, track costs via MCP tools.",
+    "version": "1.8.4",
+    "description": "Multi-agent orchestration system for AI coding agents. Create tasks, monitor agents, check status, track costs via MCP tools. Run locally via stdio transport after pipx install bernstein.",
     "homepage": "https://bernstein.run",
     "documentation": "https://bernstein.readthedocs.io/",
     "repository": "https://github.com/chernistry/bernstein"
-  },
-  "transport": {
-    "type": "streamable-http",
-    "url": "https://bernstein.run/mcp"
   },
   "capabilities": {
     "tools": true,

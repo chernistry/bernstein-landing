@@ -1,12 +1,12 @@
 ---
 title: "From 4,000 Lines to 200: Decomposing Bernstein's Core"
-description: "How 11 parallel agents decomposed a 4,198-line orchestrator into 15 focused sub-packages — using Bernstein to refactor itself."
+description: "How 11 parallel agents decomposed a 4,198-line orchestrator into 15 focused sub-packages using Bernstein to refactor itself. Extended to 22 sub-packages in later refactors."
 date: "2026-04-13"
 tags: ["Python refactoring", "code decomposition", "multi-agent orchestration", "architecture", "monolith to microservices"]
 ---
 
 <Lead>
-Bernstein's orchestrator.py hit 4,198 lines. We used 11 parallel agents — orchestrated by Bernstein itself — to decompose it into 15 sub-packages, each under 400 lines. Here's how that worked and what we learned.
+Bernstein's orchestrator.py hit 4,198 lines. We used 11 parallel agents, orchestrated by Bernstein itself, to decompose it into 15 sub-packages in the first pass, each under 400 lines. Subsequent refactors extended this to 22 sub-packages. Here's how that worked and what we learned.
 </Lead>
 
 ## How a file gets to 4,000 lines
@@ -85,7 +85,7 @@ Every existing import path works unchanged. New code imports from the specific s
 ## The result
 
 Before: 1 file, 4,198 lines, 47 imports, constant merge conflicts.
-After: 15 sub-packages, ~280 lines average, clean dependency boundaries, agents can work on different packages without conflicts.
+After: 15 sub-packages in the first pass (extended to 22 in later refactors), ~280 lines average, clean dependency boundaries, agents can work on different packages without conflicts.
 
 The [full source](https://github.com/chernistry/bernstein/tree/main/src/bernstein/core) is on GitHub. The re-export shims are in the top-level files like `orchestrator.py`, `spawner.py`, and `task_lifecycle.py`.
 

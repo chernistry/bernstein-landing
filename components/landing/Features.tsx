@@ -26,8 +26,8 @@ export function Features() {
             <div className="feature-icon">
               <svg viewBox="0 0 24 24"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
             </div>
-            <h3>21 agent adapters</h3>
-            <p>Claude Code, Codex, Gemini CLI, Aider, Cloudflare Agents, and 16 more. Mix models in one run. Switch providers without changing config.</p>
+            <h3>17 agent adapters</h3>
+            <p>Claude Code, Codex, Gemini CLI, Aider, Cloudflare Agents, and 12 more. Mix models in one run. Switch providers without changing config.</p>
           </div>
         </ScrollReveal>
         <ScrollReveal delay={360}>
@@ -45,7 +45,7 @@ export function Features() {
               <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
             </div>
             <h3>Cost-aware routing</h3>
-            <p>Epsilon-greedy bandit learns which model works best per task type. Typical savings of 50-60% vs uniform model selection.</p>
+            <p>Epsilon-greedy bandit learns which model works best per task type. In our own runs, spend dropped roughly in half. Measure yours with bernstein cost.</p>
           </div>
         </ScrollReveal>
         <ScrollReveal delay={520}>

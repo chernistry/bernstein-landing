@@ -19,8 +19,8 @@ async function fetchFresh(): Promise<CachedStats> {
     fetch(GITHUB_URL, { next: { revalidate: REVALIDATE_SECONDS }, headers: { Accept: 'application/vnd.github.v3+json' } }),
   ]);
 
-  let monthly = cache?.monthly_downloads ?? 9200;
-  let stars = cache?.stars ?? 110;
+  let monthly = cache?.monthly_downloads ?? 9500;
+  let stars = cache?.stars ?? 125;
 
   if (pypiRes.status === 'fulfilled' && pypiRes.value.ok) {
     const data = await pypiRes.value.json();

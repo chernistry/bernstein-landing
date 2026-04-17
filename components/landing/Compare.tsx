@@ -64,7 +64,7 @@ export function Compare() {
               </TableRowReveal>
               <TableRowReveal delay={80}>
                 <td>CLI agent support</td>
-                <td aria-label="Yes: 21 adapters"><span className="check">&#10003; 21 adapters</span></td>
+                <td aria-label="Yes: 17 adapters"><span className="check">&#10003; 17 adapters</span></td>
                 <td aria-label="No"><span className="cross">&#10007; No</span></td>
                 <td aria-label="No"><span className="cross">&#10007; No</span></td>
                 <td aria-label="No"><span className="cross">&#10007; No</span></td>
