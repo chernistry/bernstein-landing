@@ -13,6 +13,7 @@ import { InlineCode } from '@/components/blog/InlineCode';
 import { CodeBlock } from '@/components/blog/CodeBlock';
 import { MdxH2 } from '@/components/blog/MdxH2';
 import { MdxH3 } from '@/components/blog/MdxH3';
+import { Mermaid } from '@/components/blog/Mermaid';
 
 export const BLOG_DIR = path.resolve(process.cwd(), 'content', 'blog');
 
@@ -45,6 +46,7 @@ const mdxComponents = {
   Callout,
   Lead,
   Figure,
+  Mermaid,
   a: SmartLink,
   code: InlineCode,
   h2: MdxH2,

@@ -29,33 +29,31 @@ Cloudflare recently became [OpenAI's infrastructure partner for agent cloud comp
 
 ## Architecture overview
 
-```
-┌─────────────────────────────────────────────┐
-│  Your machine (or CI)                       │
-│  ┌───────────────────────────────────────┐  │
-│  │  bernstein cloud deploy               │  │
-│  │  bernstein cloud status               │  │
-│  └──────────────┬────────────────────────┘  │
-└─────────────────┼───────────────────────────┘
-                  │ HTTPS
-┌─────────────────┼───────────────────────────┐
-│  Cloudflare     ▼                           │
-│  ┌──────────────────────┐                   │
-│  │  Orchestrator Worker │◄── Durable Object │
-│  └──────┬───────────────┘    (state)        │
-│         │                                   │
-│    ┌────┼────┬────────┐                     │
-│    ▼    ▼    ▼        ▼                     │
-│  Agent Agent Agent  Agent   ◄── Workers     │
-│    │    │    │        │                      │
-│    └────┴────┴────────┘                     │
-│         │         │                         │
-│    ┌────┘    ┌────┘                         │
-│    ▼         ▼                              │
-│   R2       D1                               │
-│  (artifacts) (state)                        │
-└─────────────────────────────────────────────┘
-```
+<Mermaid chart={`flowchart TB
+  subgraph Local["Your machine or CI"]
+    CLI["bernstein cloud deploy<br/>bernstein cloud status"]
+  end
+  subgraph CF["Cloudflare"]
+    Orch["Orchestrator Worker"]
+    DO[("Durable Object<br/>state")]
+    A1["Agent"]
+    A2["Agent"]
+    A3["Agent"]
+    A4["Agent"]
+    R2[("R2<br/>artifacts")]
+    D1[("D1<br/>state")]
+    Orch <--> DO
+    Orch --> A1
+    Orch --> A2
+    Orch --> A3
+    Orch --> A4
+    A1 -.-> R2
+    A2 -.-> R2
+    A3 -.-> R2
+    A4 -.-> D1
+  end
+  CLI -- HTTPS --> Orch
+`} />
 
 The orchestrator itself runs as a Worker with a Durable Object for maintaining tick state. Agent Workers are spawned per-task and communicate results back through R2 and D1.
 
