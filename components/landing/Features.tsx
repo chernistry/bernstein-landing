@@ -66,6 +66,15 @@ export function Features() {
             <p>Per-agent cost tracking, token monitoring, quality trends, Prometheus metrics. Know what happened and what it cost.</p>
           </div>
         </ScrollReveal>
+        <ScrollReveal delay={640}>
+          <div className="feature">
+            <div className="feature-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+            </div>
+            <h3>Cloud artifact sinks</h3>
+            <p>Buffer .sdd/ state and per-task artifacts into S3, GCS, Azure Blob, or Cloudflare R2. Same local-file interface, durable off-box persistence.</p>
+          </div>
+        </ScrollReveal>
         <ScrollReveal delay={680}>
           <div className="feature">
             <div className="feature-icon">

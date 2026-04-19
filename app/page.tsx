@@ -43,6 +43,7 @@ const SOFTWARE_APP_JSON_LD = {
     'Deterministic scheduling',
     '18 agent adapters',
     'Pluggable sandbox backends (worktree, Docker, E2B, Modal, Blaxel, Cloudflare, Daytona, Runloop, Vercel)',
+    'Cloud artifact sinks (S3, GCS, Azure Blob, Cloudflare R2)',
     'Quality gates',
     'Cost-aware routing',
     'MCP server mode',
@@ -100,6 +101,14 @@ const FAQ_JSON_LD = {
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'Bernstein abstracts agent isolation behind a SandboxBackend protocol. Out of the box it supports git worktrees (local), Docker containers, and hosted sandboxes from E2B, Modal, Blaxel, Cloudflare, Daytona, Runloop, and Vercel. Swap backends in bernstein.yaml; the orchestrator is unchanged.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I store .sdd/ state and artifacts in the cloud?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Artifacts (task state, bulletins, metrics, WAL) flow through a BufferedSink wrapper that speaks to pluggable storage backends: local disk, Amazon S3, Google Cloud Storage, Azure Blob Storage, or Cloudflare R2. Configure under the storage block in bernstein.yaml; agents keep reading and writing through the same local-file API.',
       },
     },
     {

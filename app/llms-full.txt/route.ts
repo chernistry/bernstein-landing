@@ -166,9 +166,10 @@ The system is organized into 22 sub-packages under \`src/bernstein/core/\`:
 - Merge queue for ordering results
 - Branch creation and cleanup
 
-#### Persistence (\`persistence/\`)
+#### Persistence (\`persistence/\`, \`storage/\`)
 - WAL (Write-Ahead Log) crash recovery
-- File-based state persistence
+- File-based state persistence with pluggable sinks (local disk, Amazon S3, Google Cloud Storage, Azure Blob Storage, Cloudflare R2)
+- \`BufferedSink\` wrapper batches writes and fans out to any configured backend
 - Periodic checkpointing
 
 #### Planning (\`planning/\`)
@@ -579,6 +580,9 @@ Yes. The \`openai_agents\` adapter embeds OpenAI's Agents SDK v2 as a first-clas
 
 ### What sandbox backends does Bernstein support?
 Bernstein exposes a \`SandboxBackend\` protocol. The default backend is a git worktree on the local machine. You can swap in Docker, E2B, Modal, Blaxel, Cloudflare Workers sandboxes, Daytona, Runloop, or Vercel sandboxes by setting \`sandbox.backend\` in \`bernstein.yaml\` and installing the matching extra (for example \`pip install "bernstein[e2b]"\`). The orchestrator and adapters do not change.
+
+### Can I store \`.sdd/\` state and artifacts in the cloud?
+Yes. The \`BufferedSink\` wrapper batches writes and forwards them to pluggable storage backends: local disk, Amazon S3, Google Cloud Storage, Azure Blob Storage, or Cloudflare R2. Configure under the \`storage\` block in \`bernstein.yaml\` and install the relevant extra (\`pip install "bernstein[s3]"\`, \`[gcs]\`, \`[azure]\`, or \`[r2]\`). Agents continue to read and write through the normal local-file API — only the persistence layer changes.
 
 ---
 

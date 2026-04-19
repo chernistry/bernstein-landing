@@ -40,6 +40,11 @@ const FAQ_ITEMS: FAQItem[] = [
       "Bernstein abstracts agent isolation behind a SandboxBackend protocol. Out of the box it supports git worktrees (local), Docker containers, and hosted sandboxes from E2B, Modal, Blaxel, Cloudflare, Daytona, Runloop, and Vercel. Swap backends in bernstein.yaml; the orchestrator is unchanged.",
   },
   {
+    question: "Can I store .sdd/ state and artifacts in the cloud?",
+    answer:
+      "Yes. Artifacts (task state, bulletins, metrics, WAL) flow through a BufferedSink wrapper that speaks to pluggable storage backends: local disk, Amazon S3, Google Cloud Storage, Azure Blob Storage, or Cloudflare R2. Configure under the storage block in bernstein.yaml; agents keep reading and writing through the same local-file API.",
+  },
+  {
     question: "Is Bernstein free?",
     answer:
       "Yes. Bernstein is open-source under the Apache 2.0 license. You only pay for the AI model API usage of the agents themselves (e.g. your Anthropic or OpenAI API key).",
