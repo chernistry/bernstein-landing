@@ -26,8 +26,8 @@ export function Features() {
             <div className="feature-icon">
               <svg viewBox="0 0 24 24"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
             </div>
-            <h3>17 agent adapters</h3>
-            <p>Claude Code, Codex, Gemini CLI, Aider, Cloudflare Agents, and 12 more. Mix models in one run. Switch providers without changing config.</p>
+            <h3>18 agent adapters</h3>
+            <p>Claude Code, Codex, Gemini CLI, OpenAI Agents SDK, Aider, Cloudflare Agents, and 12 more. Mix models in one run. Switch providers without changing config.</p>
           </div>
         </ScrollReveal>
         <ScrollReveal delay={360}>

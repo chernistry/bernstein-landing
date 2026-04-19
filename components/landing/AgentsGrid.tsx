@@ -36,6 +36,14 @@ const agents: Agent[] = [
     ),
   },
   {
+    name: 'OpenAI Agents SDK', models: 'GPT-5, GPT-4.1 via Responses API', category: 'SDK',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="10" cy="10" r="7" /><path d="M10 3v14" /><path d="M3 10h14" /><circle cx="10" cy="10" r="2.5" />
+      </svg>
+    ),
+  },
+  {
     name: 'Cursor', models: 'Any model via Cursor', category: 'Editor',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -154,7 +162,7 @@ export function AgentsGrid() {
     <section id="agents" aria-labelledby="agents-heading">
       <ScrollReveal>
         <div className="section-header">
-          <h2 id="agents-heading">Works with every major coding agent <span className="agent-count">17</span></h2>
+          <h2 id="agents-heading">Works with every major coding agent <span className="agent-count">18</span></h2>
           <p>Mix local models for boilerplate with cloud models for architecture. In the same run.</p>
         </div>
       </ScrollReveal>
@@ -177,7 +185,7 @@ export function AgentsGrid() {
       <ScrollReveal delay={800}>
         <div className="agents-more-wrap">
           <a href="https://bernstein.readthedocs.io/" className="agents-more">
-            View all 17 adapters and configuration &rarr;
+            View all 18 adapters and configuration &rarr;
           </a>
         </div>
       </ScrollReveal>

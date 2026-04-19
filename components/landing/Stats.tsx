@@ -84,7 +84,7 @@ export function Stats() {
       // Fallback if API is too slow
       if (!loaded) {
         setDownloads(9500);
-        setStars(125);
+        setStars(140);
         setLoaded(true);
       }
     }, 3000);
@@ -101,7 +101,7 @@ export function Stats() {
       })
       .catch(() => {
         setDownloads(9500);
-        setStars(125);
+        setStars(140);
         setLoaded(true);
       });
 
@@ -129,7 +129,7 @@ export function Stats() {
       </a>
       <div className="stat">
         <div className="stat-num">
-          <AnimatedNumber target={17} ready={loaded} />
+          <AnimatedNumber target={18} ready={loaded} />
         </div>
         <div className="stat-label">Agent adapters</div>
       </div>

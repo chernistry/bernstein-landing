@@ -85,7 +85,7 @@ bernstein run plans/my-project.yaml
 
 3. **Short-lived agents**: Agents handle 1-3 tasks each, then exit. No long-running agent processes. Fresh context per task prevents hallucination drift.
 
-4. **Agent-agnostic**: Works with any CLI coding agent. Currently ships 17 adapters. Adding a new agent requires implementing a simple adapter interface.
+4. **Agent-agnostic**: Works with any CLI coding agent. Currently ships 18 adapters. Adding a new agent requires implementing a simple adapter interface.
 
 5. **Model-per-task routing**: A contextual bandit router learns which model works best for each task type and complexity level. In our own runs, the bandit router cut spend roughly in half compared to uniformly using expensive models. Measure yours with bernstein cost.
 
@@ -196,13 +196,14 @@ The system is organized into 22 sub-packages under \`src/bernstein/core/\`:
 
 ---
 
-## Supported Agents (17 Adapters)
+## Supported Agents (18 Adapters)
 
 | Agent | Description | Models |
 |-------|-------------|--------|
 | Claude Code | Anthropic's CLI agent | Opus 4.7, Sonnet 4.6, Haiku 4.5 |
 | Codex CLI | OpenAI's CLI agent | GPT-5 family |
 | Gemini CLI | Google's CLI agent | Gemini 2.5 Pro |
+| OpenAI Agents SDK | OpenAI Agents SDK v2 runtime | GPT-5, GPT-4.1 via Responses API |
 | Cursor | AI-powered editor CLI | Any model via Cursor |
 | Aider | Open-source AI pair programmer | Any OpenAI/Anthropic model |
 | Amp | Sourcegraph Amp | Sourcegraph models |
@@ -514,7 +515,7 @@ Bernstein assigns roles to agents based on task requirements:
 | Feature | Bernstein | CrewAI | AutoGen | LangGraph |
 |---------|-----------|--------|---------|-----------|
 | Orchestrator | Deterministic code | LLM-driven | LLM-driven | Graph + LLM |
-| CLI agent support | 17 adapters | No | No | No |
+| CLI agent support | 18 adapters | No | No | No |
 | Git isolation | Worktrees | No | No | No |
 | Quality gates | Built-in | No | No | Partial |
 | Cost tracking | Per-agent | No | No | No |
@@ -549,7 +550,7 @@ Bernstein is an open-source multi-agent orchestration system that coordinates AI
 Bernstein's orchestrator is deterministic Python code — no LLM tokens are spent on coordination. It works with real CLI coding agents (not API-only models) and provides git worktree isolation, quality gates, and cost tracking out of the box.
 
 ### What agents does Bernstein support?
-Bernstein ships 17 adapters for popular coding agents including Claude Code, Codex CLI, Gemini CLI, Cursor, Aider, Amp, Ollama, and more. It also has a generic adapter for wrapping any CLI tool.
+Bernstein ships 18 adapters for popular coding agents including Claude Code, Codex CLI, Gemini CLI, OpenAI Agents SDK, Cursor, Aider, Amp, Ollama, and more. It also has a generic adapter for wrapping any CLI tool.
 
 ### How does task routing work?
 Bernstein uses a contextual bandit (epsilon-greedy) router that learns which model works best for each task type and complexity. Simple tasks go to cheaper models (Haiku, Flash), complex architecture tasks go to expensive models (Opus). In our own runs, the bandit router cut spend roughly in half compared to using expensive models for everything. Measure yours with bernstein cost.

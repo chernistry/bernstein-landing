@@ -90,7 +90,7 @@ export async function GET(request: NextRequest) {
                 color: '#c0c0d0',
               }}
             >
-              <span style={{ color: '#ffcc00' }}>&#9733;</span> 125+ stars
+              <span style={{ color: '#ffcc00' }}>&#9733;</span> 140+ stars
             </div>
             <div
               style={{
@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
                 color: '#c0c0d0',
               }}
             >
-              17 adapters
+              18 adapters
             </div>
           </div>
         </div>

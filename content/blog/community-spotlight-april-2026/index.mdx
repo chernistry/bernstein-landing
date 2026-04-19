@@ -11,10 +11,10 @@ Every month we spotlight the people who make Bernstein better. Here are April's 
 
 ## What happened in April
 
-Bernstein went from v1.0.0 to v1.8.4 in two weeks. The pace was intense, and community contributions made a real difference:
+Bernstein went from v1.0.0 to v1.8.8 in a few weeks. The pace was intense, and community contributions made a real difference:
 
 - **Architecture decomposition**: 52 oversized modules broken into 22 focused sub-packages, each under 600 lines. The orchestrator monolith (4,198 lines) is now navigable, testable, and merge-conflict-free. [Read the full story](/blog/module-decomposition).
-- **17 agent adapters**: We started with 7 adapters and now support 17: Claude Code, Codex, Gemini CLI, Cursor, Aider, Amp, Kiro, Kilo, Qwen, Goose, Ollama, Cody, Continue, OpenCode, Cloudflare Agents, IaC, and a generic wrapper. Each adapter is a focused Python class under 200 lines.
+- **18 agent adapters**: We started with 7 adapters and now support 18: Claude Code, Codex, Gemini CLI, OpenAI Agents SDK, Cursor, Aider, Amp, Kiro, Kilo, Qwen, Goose, Ollama, Cody, Continue, OpenCode, Cloudflare Agents, IaC, and a generic wrapper. Each adapter is a focused Python class under 200 lines.
 - **Cost-aware routing**: The [contextual bandit router](/blog/cost-aware-routing) learns which model handles each task type best. In our own runs, the bandit cut spend roughly in half compared to sending everything to the same model.
 - **Cloudflare cloud execution**: Agents can now [run on Cloudflare Workers](/blog/cloudflare-cloud-execution) with Durable Workflows, R2 artifact storage, and D1 state.
 - **Windows support**: Full cross-platform compatibility contributed by [@oldschoola](https://github.com/oldschoola): environment passthrough, Unicode safety, process management, and terminal handling.

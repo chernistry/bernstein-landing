@@ -20,7 +20,7 @@ async function fetchFresh(): Promise<CachedStats> {
   ]);
 
   let monthly = cache?.monthly_downloads ?? 9500;
-  let stars = cache?.stars ?? 125;
+  let stars = cache?.stars ?? 140;
 
   if (pypiRes.status === 'fulfilled' && pypiRes.value.ok) {
     const data = await pypiRes.value.json();
