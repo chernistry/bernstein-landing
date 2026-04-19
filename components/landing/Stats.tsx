@@ -80,33 +80,31 @@ export function Stats() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      // Fallback if API is too slow
-      if (!loaded) {
-        setDownloads(9500);
-        setStars(140);
-        setLoaded(true);
-      }
-    }, 3000);
+    let cancelled = false;
 
     fetch('/api/stats')
-      .then((r) => r.ok ? r.json() : null)
+      .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (data) {
+        if (cancelled || !data) return;
+        // If upstream is down the API returns zeros — only show numbers we trust.
+        if (typeof data.monthly_downloads === 'number' && data.monthly_downloads > 0) {
           setDownloads(data.monthly_downloads);
-          setStars(data.stars);
-          setLoaded(true);
-          clearTimeout(timeout);
         }
+        if (typeof data.stars === 'number' && data.stars > 0) {
+          setStars(data.stars);
+        }
+        setLoaded(true);
       })
-      .catch(() => {
-        setDownloads(9500);
-        setStars(140);
+      .catch((err) => {
+        if (cancelled) return;
+        console.error('[stats] fetch failed', err);
         setLoaded(true);
       });
 
-    return () => clearTimeout(timeout);
-  }, [loaded]);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="stats">
