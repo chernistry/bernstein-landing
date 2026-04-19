@@ -43,6 +43,10 @@
     {
       "name": "bernstein_health",
       "description": "Check system health"
+    },
+    {
+      "name": "load_skill",
+      "description": "Progressively load a role skill pack on demand (backend, qa, security, etc.) — keeps system prompts small"
     }
   ]
 }

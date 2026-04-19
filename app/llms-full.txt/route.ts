@@ -584,6 +584,9 @@ Bernstein exposes a \`SandboxBackend\` protocol. The default backend is a git wo
 ### Can I store \`.sdd/\` state and artifacts in the cloud?
 Yes. The \`BufferedSink\` wrapper batches writes and forwards them to pluggable storage backends: local disk, Amazon S3, Google Cloud Storage, Azure Blob Storage, or Cloudflare R2. Configure under the \`storage\` block in \`bernstein.yaml\` and install the relevant extra (\`pip install "bernstein[s3]"\`, \`[gcs]\`, \`[azure]\`, or \`[r2]\`). Agents continue to read and write through the normal local-file API — only the persistence layer changes.
 
+### What are progressive skill packs?
+Bernstein ships its role guidance (backend, frontend, QA, security, DevOps, architect, reviewer, and so on) as progressive-disclosure skill packs instead of one giant system prompt. Agents start with a short bootstrap prompt and fetch individual skills on demand through the \`load_skill\` MCP tool. Only the skills a task actually touches are paid for in tokens, and packs can be versioned, added, or swapped without shipping a release. Skills live under \`templates/skills/\`.
+
 ---
 
 ## Links

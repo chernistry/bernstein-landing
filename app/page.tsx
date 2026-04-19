@@ -44,6 +44,7 @@ const SOFTWARE_APP_JSON_LD = {
     '18 agent adapters',
     'Pluggable sandbox backends (worktree, Docker, E2B, Modal, Blaxel, Cloudflare, Daytona, Runloop, Vercel)',
     'Cloud artifact sinks (S3, GCS, Azure Blob, Cloudflare R2)',
+    'Progressive-disclosure skill packs via load_skill MCP tool',
     'Quality gates',
     'Cost-aware routing',
     'MCP server mode',
@@ -149,6 +150,14 @@ const FAQ_JSON_LD = {
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'Bernstein routes tasks to the optimal model based on complexity: Opus for architecture and hard problems, Sonnet for standard implementation, Haiku for tests and boilerplate. An epsilon-greedy contextual bandit learns which model performs best for each task type over time.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What are progressive skill packs?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Instead of loading every role prompt at startup, Bernstein ships skills as progressive-disclosure packs. Agents start with a short system prompt and pull extra context on demand through the load_skill MCP tool — only the skills a task actually needs are paid for in tokens. Skills are versioned bundles under templates/skills/ and can be added without shipping a release.',
       },
     },
   ],

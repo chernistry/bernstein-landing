@@ -69,6 +69,11 @@ const FAQ_ITEMS: FAQItem[] = [
     answer:
       "Bernstein routes tasks to the optimal model based on complexity: Opus for architecture and hard problems, Sonnet for standard implementation, Haiku for tests and boilerplate. An epsilon-greedy contextual bandit learns which model performs best for each task type over time.",
   },
+  {
+    question: "What are progressive skill packs?",
+    answer:
+      "Instead of loading every role prompt at startup, Bernstein ships skills as progressive-disclosure packs. Agents start with a short system prompt and pull extra context on demand through the load_skill MCP tool — only the skills a task actually needs are paid for in tokens. Skills are versioned bundles under templates/skills/ and can be added without shipping a release.",
+  },
 ];
 
 function ChevronDown() {

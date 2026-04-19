@@ -102,6 +102,15 @@ export function Features() {
             <p>Analyzes quality metrics, cost trends, and failure patterns, then proposes and executes its own improvements. Ships upgrades to itself.</p>
           </div>
         </ScrollReveal>
+        <ScrollReveal delay={920}>
+          <div className="feature">
+            <div className="feature-icon">
+              <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/><path d="M18 14l4 4-4 4"/></svg>
+            </div>
+            <h3>Progressive skill packs</h3>
+            <p>Role prompts load on demand via the load_skill MCP tool. Agents start with a minimal system prompt, pull only the skills a task needs, and save tokens on every call.</p>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );

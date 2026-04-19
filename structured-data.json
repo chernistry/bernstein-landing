@@ -37,6 +37,7 @@
         "18 agent adapters (Claude Code, Codex, Gemini CLI, OpenAI Agents SDK, etc.)",
         "Pluggable sandbox backends (git worktree, Docker, E2B, Modal, Blaxel, Cloudflare, Daytona, Runloop, Vercel)",
         "Cloud artifact sinks via BufferedSink (S3, GCS, Azure Blob, Cloudflare R2)",
+        "Progressive-disclosure skill packs with load_skill MCP tool",
         "Quality gates (lint, types, tests, security)",
         "Cost-aware contextual bandit routing",
         "Token monitoring with auto-intervention",
