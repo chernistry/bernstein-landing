@@ -289,10 +289,12 @@ header.nav-scrolled {
   z-index: 149;
   background: oklch(0 0 0 / 0.5);
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.2s ease-out;
 }
 .mobile-overlay--visible {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .mobile-drawer {
@@ -307,12 +309,14 @@ header.nav-scrolled {
   background: var(--surface);
   border-left: 1px solid var(--border);
   transform: translateX(100%);
+  pointer-events: none;
   transition: transform 0.25s ease-out;
   padding: var(--space-5);
   overflow-y: auto;
 }
 .mobile-drawer--open {
   transform: translateX(0);
+  pointer-events: auto;
 }
 
 .mobile-drawer-close {
