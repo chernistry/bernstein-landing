@@ -1,0 +1,92 @@
+---
+title: "Orchestration primitive or desktop ADE? Choosing your multi-agent coding layer in 2026"
+description: "The multi-agent coding category split into two shapes: desktop ADEs you download and open, and orchestration primitives you import. When to reach for each, and why both can live in the same stack."
+date: "2026-04-21"
+tags: ["multi-agent coding", "agent orchestration", "AI coding agents", "developer tools", "agentic development environment", "bernstein vs emdash", "orchestration primitives"]
+---
+
+<Lead>
+The multi-agent coding tool category went from a handful of projects in late 2024 to thirty-plus by mid-2026. Along the way it split into two shapes that solve adjacent-but-different problems. Here's when to reach for each, and why you might end up using both.
+</Lead>
+
+## The two shapes
+
+**Desktop ADEs.** A downloadable desktop application. You install it like any other app, open a window, configure credentials, and see your repo, your agents, and your diffs in a unified UI. Examples in the open-source corner: [emdash](https://github.com/generalaction/emdash) (Electron app, 23 CLI providers supported, YC W26-funded), [Conductor](https://conductor.build), Cline's desktop mode. Closed-source you'd put in the same category: Claude Code's VS Code extension, Cursor's "run in background" mode.
+
+**Orchestration primitives.** A library or CLI you import into your own workflow. You don't see a window; you see a process you can pipe into other things. Examples: [Bernstein](https://bernstein.run) (the project this blog belongs to — 18 CLI adapters, Python-importable), [Workz](https://github.com/skeet70/workz), certain configurations of Plandex. LangGraph and CrewAI are adjacent but different — they orchestrate LLM calls, not CLI coding agents.
+
+The distinction is not about which is better. It's about what layer of the problem you're solving.
+
+## What a desktop ADE does well
+
+A desktop ADE gives you:
+
+- A visual workspace. Diffs, PR status, CI checks, agent logs all in one window.
+- Zero-config launch. You open the app, it picks up your repo, agents just work.
+- Identity handled. Credentials in the OS keychain, not in a `.env` file that leaks.
+- Distribution pattern. Electron installers for macOS, Windows, Linux. Your non-terminal colleague can use it.
+
+This shape is the right answer when:
+
+- You're the kind of developer who keeps an IDE open all day and wants agents integrated into that workflow, not hidden in a `tmux` pane.
+- You're onboarding teammates who don't live in the terminal.
+- You want one tool that covers edit, review, merge, and CI visibility end-to-end.
+
+What it trades off:
+
+- Not programmable from the outside. You can't `import emdash` or write a CI job that kicks off a parallel agent run via emdash's API. It's a UI, not a library.
+- Ships with opinionated conventions. Agents live in app-managed worktrees; audit logs live in app databases. Extracting them into another system is possible but not first-class.
+- Cross-machine coordination is an extra feature (SSH mode, remote runtime) rather than the default shape.
+
+## What an orchestration primitive does well
+
+A primitive gives you:
+
+- A process you can script. `bernstein run --goal "..." | jq .` works. So does invoking it from a GitHub Actions workflow, or importing `bernstein.core` in your Python code.
+- Deterministic coordination. The scheduler is a regular event loop. Every run is replay-able from the audit trail.
+- MCP server mode. Your agent-of-choice can talk to the orchestrator through the same Model Context Protocol Anthropic publishes for Claude Code.
+- Composition. A primitive is one step in a larger pipeline: linter → primitive multi-agent pass → janitor → merge queue → deploy.
+
+This shape is the right answer when:
+
+- You want to embed multi-agent coding into a system you already run: CI, internal dev-platform, evaluation harness.
+- You care about reproducibility. HMAC-chained audit trails give you "did the agent really do exactly that?" answers days later.
+- You're already in a scripting-first workflow and don't want a new app to keep open.
+
+What it trades off:
+
+- No visual diff/merge UI out of the box. You `git diff` the worktree, or plug it into your existing tools.
+- Setup needs a terminal. `pipx install bernstein && bernstein init`, not a double-click installer.
+- It's one layer of a larger stack. You'll likely pair it with a separate review tool, CI system, and notification channel.
+
+## Decision shortcuts
+
+- **Building a product on top of multi-agent coding?** Reach for a primitive. Libraries compose; apps don't.
+- **Onboarding a team that wants a single download?** Reach for a desktop ADE. Developer ergonomics of an opinionated installable app is hard to beat for non-power-users.
+- **Running agents as part of CI / evaluation / internal platform?** Primitive, nearly always.
+- **Running agents on your own laptop during normal dev work?** Either works; it's a preference question. Try both for a week.
+- **Need to prove to compliance or security "here's exactly what happened"?** HMAC audit trails live in the primitive layer. ADE output logs are usually app-scoped.
+
+## They often co-exist
+
+Nothing prevents running both. A pattern we've seen in Bernstein's early users:
+
+- Bernstein in CI for the "every PR gets a lint-plus-refactor agent pass" step.
+- Desktop ADE for interactive "I'm pairing with Claude Code on this refactor" flow.
+- Bernstein's MCP server mode exposed to the ADE so both see the same audit trail.
+
+If you're already using a desktop ADE and it covers what you need, keep it. If you hit the "but I want to run this from a shell script / from CI / inside another service" wall, that's the signal to look at a primitive, regardless of which specific one.
+
+## Bernstein's specific positioning
+
+Bernstein is the primitive-shape tool. What we optimize for:
+
+- Deterministic coordinator written in plain Python — no LLM in the scheduling loop, so runs are reproducible.
+- HMAC-chained audit trail — every agent action is replay-able bit-for-bit days later.
+- MCP server mode — expose Bernstein to any MCP-capable client (Claude Code, Cursor, or your own agent).
+- 18 CLI adapters including Claude Code, Codex, Cursor, Aider, Gemini CLI, OpenAI Agents SDK, Amp, Cody, Ollama, and more.
+- Apache 2.0, BYOK, `pipx install bernstein`.
+
+What we don't build: a desktop UI. If you need one, emdash and Conductor both do that well and are worth trying.
+
+The category is large enough to have multiple right answers. The question is which layer of your stack you're optimizing for. A primitive and an ADE are not competing with each other. They're competing with the "write a bunch of glue code to make two agents work on the same repo without destroying it" option — which nearly everyone used until twelve months ago, and which neither shape is going back to.
