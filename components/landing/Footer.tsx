@@ -29,6 +29,16 @@ export function Footer() {
             <a href="/humans.txt">Humans</a>
           </div>
         </div>
+        <div className="footer-badges">
+          <a href="https://codetrendy.com" target="_blank" rel="noopener noreferrer" aria-label="Listed on codetrendy.com">
+            <img
+              src="https://codetrendy.com/api/badge?style=classic"
+              alt="Listed on codetrendy.com"
+              height="54"
+              loading="lazy"
+            />
+          </a>
+        </div>
         <div className="footer-bottom">
           <p>Made by <a href="https://alexchernysh.com">Alex Chernysh</a> · <a href="mailto:forte@bernstein.run">forte@bernstein.run</a></p>
         </div>

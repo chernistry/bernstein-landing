@@ -1078,6 +1078,30 @@ footer {
   transition: color 0.15s ease-out;
 }
 .footer-col a:hover { color: var(--text); }
+
+.footer-badges {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  padding: var(--space-5) 0;
+  margin-top: var(--space-4);
+}
+.footer-badges a {
+  display: inline-flex;
+  opacity: 0.75;
+  transition: opacity 0.15s ease-out;
+}
+.footer-badges a:hover {
+  opacity: 1;
+}
+.footer-badges img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 .footer-bottom {
   border-top: 1px solid var(--border-subtle);
   padding-top: var(--space-5);
