@@ -29,6 +29,19 @@ const agents: Agent[] = [
   { name: 'OpenCode', models: 'OSS · any OpenAI-compatible', category: 'CLI', monogram: 'Oc', hue: 140 },
   { name: 'Kilo', models: 'OSS · any OpenAI-compatible', category: 'CLI', monogram: 'Kl', hue: 20 },
   { name: 'IaC', models: 'Platform · Terraform, Pulumi', category: 'Infra', monogram: 'IaC', hue: 200 },
+  { name: 'GitHub Copilot', models: 'GitHub · GPT-5, Sonnet', category: 'CLI', monogram: 'Gh', hue: 280 },
+  { name: 'Droid', models: 'Factory AI · Sonnet, GPT-5', category: 'CLI', monogram: 'Dr', hue: 45 },
+  { name: 'Crush', models: 'Charm · Sonnet, GPT-5, OpenRouter', category: 'CLI', monogram: 'Ch', hue: 340 },
+  { name: 'Auggie', models: 'Augment Code · any model', category: 'CLI', monogram: 'Ag', hue: 100 },
+  { name: 'Kimi', models: 'Moonshot · Kimi K2, K1.5', category: 'CLI', monogram: 'Km', hue: 240 },
+  { name: 'Rovo Dev', models: 'Atlassian · Sonnet, GPT-5', category: 'CLI', monogram: 'Rv', hue: 210 },
+  { name: 'Cline', models: 'Anthropic / OpenAI / OpenRouter', category: 'CLI', monogram: 'Cl', hue: 190 },
+  { name: 'Codebuff', models: 'Anthropic / OpenAI', category: 'CLI', monogram: 'Cb', hue: 130 },
+  { name: 'Pi', models: 'Anthropic / OpenAI / OpenRouter', category: 'CLI', monogram: 'Pi', hue: 15 },
+  { name: 'Mistral Vibe', models: 'Mistral · Codestral, Large', category: 'CLI', monogram: 'Mi', hue: 340 },
+  { name: 'Autohand', models: 'Anthropic / OpenAI', category: 'CLI', monogram: 'Ah', hue: 170 },
+  { name: 'Forge', models: 'forgecode · any model', category: 'CLI', monogram: 'Fg', hue: 55 },
+  { name: 'Hermes', models: 'Nous Research · Anthropic / OpenAI', category: 'CLI', monogram: 'He', hue: 295 },
   { name: 'Generic', models: 'Any OpenAI-compatible', category: 'Adapter', monogram: '·', hue: null },
 ];
 
@@ -83,7 +96,7 @@ export function AgentsGrid() {
       <ScrollReveal>
         <div className="section-header">
           <h2 id="agents-heading">
-            Works with every major coding agent <span className="agent-count">18</span>
+            Works with every major coding agent <span className="agent-count">31</span>
           </h2>
           <p>Mix local models for boilerplate with cloud models for architecture. In the same run.</p>
         </div>
@@ -112,7 +125,7 @@ export function AgentsGrid() {
             <div
               key={agent.name}
               className="agent-card agent-card-staggered"
-              style={{ animationDelay: `${Math.min(i * 18, 300)}ms` }}
+              style={{ animationDelay: `${Math.min(i * 10, 300)}ms` }}
             >
               <span className="agent-monogram" style={monogramStyle(agent.hue)} aria-hidden="true">
                 {agent.monogram}
@@ -131,7 +144,7 @@ export function AgentsGrid() {
       <ScrollReveal delay={260}>
         <div className="agents-more-wrap">
           <a href="https://bernstein.readthedocs.io/" className="agents-more">
-            View all 18 adapters and configuration &rarr;
+            View all 31 adapters and configuration &rarr;
           </a>
         </div>
       </ScrollReveal>

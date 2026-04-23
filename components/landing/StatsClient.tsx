@@ -23,7 +23,7 @@ interface AnimatedNumberProps {
   /**
    * When target is a live value we animate from 80% of the target (so the
    * first visible digits are already believable); when target is known at
-   * mount (e.g. a constant like 18) we animate from 0. Never render animated
+   * mount (e.g. a constant like 31) we animate from 0. Never render animated
    * zeros for fetched values.
    */
   startFraction?: number;
@@ -144,7 +144,7 @@ export function StatsClient({ initialStars, initialDownloads }: StatsClientProps
       </a>
       <div className="stat">
         <div className="stat-num">
-          <AnimatedNumber target={18} startFraction={0} />
+          <AnimatedNumber target={31} startFraction={0} />
         </div>
         <div className="stat-label">Agent adapters</div>
         <div className="stat-sub">1 generic</div>

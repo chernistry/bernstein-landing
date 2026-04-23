@@ -51,8 +51,8 @@ export async function Hero() {
   const { monthly_downloads } = await fetchPackageStats();
   const downloads = formatDownloadsProof(monthly_downloads);
   const proofLine = downloads
-    ? `${downloads} monthly downloads · Apache 2.0 · 18 agent adapters`
-    : 'Apache 2.0 · 18 agent adapters · Open source';
+    ? `${downloads} monthly downloads · Apache 2.0 · 31 agent adapters`
+    : 'Apache 2.0 · 31 agent adapters · Open source';
 
   return (
     <div className="hero hero-split">

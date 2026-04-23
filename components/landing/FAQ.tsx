@@ -22,7 +22,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "What AI coding agents does Bernstein support?",
     answer:
-      "Bernstein ships 18 adapters: Claude Code, Codex CLI, Gemini CLI, OpenAI Agents SDK, Cursor, Aider, Amp, Kiro, Kilo, Qwen, Goose, Cody, Continue, OpenCode, Ollama, Cloudflare Agents, IaC, and a Generic adapter that wraps any CLI tool.",
+      "Bernstein ships 31 adapters: Claude Code, Codex CLI, Gemini CLI, OpenAI Agents SDK, Cursor, Aider, Amp, Kiro, Kilo, Qwen, Goose, Cody, Continue, OpenCode, Ollama, Cloudflare Agents, IaC, GitHub Copilot, Droid (Factory AI), Crush (Charm), Auggie (Augment), Kimi, Rovo Dev (Atlassian), Cline, Codebuff, Pi, Mistral Vibe, Autohand, Forge, Hermes, and a Generic adapter that wraps any CLI tool.",
   },
   {
     question: "How does Bernstein differ from CrewAI or AutoGen?",
@@ -122,6 +122,19 @@ const SUPPORTED_AGENTS = [
   "Ollama",
   "Cloudflare Agents",
   "IaC",
+  "GitHub Copilot",
+  "Droid",
+  "Crush",
+  "Auggie",
+  "Kimi",
+  "Rovo Dev",
+  "Cline",
+  "Codebuff",
+  "Pi",
+  "Mistral Vibe",
+  "Autohand",
+  "Forge",
+  "Hermes",
   "Generic",
 ];
 
@@ -168,7 +181,7 @@ uv pip install bernstein`}</code>
     return (
       <>
         <p>
-          Bernstein ships 18 adapters covering the major CLI coding agents plus
+          Bernstein ships 31 adapters covering the major CLI coding agents plus
           a generic wrapper for any CLI tool:
         </p>
         <ul className="faq-pill-row" role="list">

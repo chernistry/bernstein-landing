@@ -22,17 +22,23 @@ interface CompareTable {
   rows: CompareRow[];
 }
 
-const LAST_VERIFIED = 'verified 22 Apr 2026';
+const LAST_VERIFIED = 'verified 23 Apr 2026';
 
-const frameworksTable: CompareTable = {
-  headers: ['Bernstein', 'CrewAI', 'AutoGen', 'LangGraph'],
+// Single merged comparison. One table, one story: which tools are in the
+// market, and where each sits on the dimensions that matter when you pick
+// an orchestrator for CLI coding agents. AutoGen is dropped — it entered
+// maintenance mode in 2025 and its successor (Microsoft Agent Framework)
+// is too new to be a useful reference point.
+const mergedTable: CompareTable = {
+  headers: ['Bernstein', 'emdash', 'Composio', 'CrewAI', 'LangGraph'],
   rows: [
     {
       label: 'Orchestrator',
       cells: [
         { kind: 'text', text: 'Deterministic code' },
+        { kind: 'partial', text: '~ Desktop UI', aria: 'Partial: Desktop UI session manager' },
+        { kind: 'partial', text: '~ Manual', aria: 'Partial: Manual scheduling' },
         { kind: 'partial', text: '~ LLM-driven', aria: 'Partial: LLM-driven plus code Flows' },
-        { kind: 'partial', text: '~ LLM-driven', aria: 'Partial: LLM-driven' },
         { kind: 'partial', text: '~ Graph + LLM', aria: 'Partial: Graph + LLM' },
       ],
     },
@@ -40,29 +46,32 @@ const frameworksTable: CompareTable = {
       label: 'CLI agent support',
       onlyBernstein: true,
       cells: [
-        { kind: 'yes', text: '18 adapters', aria: 'Yes: 18 adapters' },
-        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'yes', text: '31 adapters', aria: 'Yes: 31 adapters' },
+        { kind: 'partial', text: '~ several', aria: 'Partial: several agents' },
+        { kind: 'partial', text: '~ few', aria: 'Partial: few agents' },
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
       ],
     },
     {
       label: 'Git isolation',
-      onlyBernstein: true,
       cells: [
         { kind: 'yes', text: 'Worktree / sandbox', aria: 'Yes: Worktrees or cloud sandbox' },
-        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'partial', text: '~ Worktree', aria: 'Partial: Worktrees only' },
+        { kind: 'partial', text: '~ Worktree', aria: 'Partial: Worktrees only' },
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
       ],
     },
     {
       label: 'Quality gates',
+      onlyBernstein: true,
       cells: [
         { kind: 'yes', text: 'Built-in', aria: 'Yes: Built-in janitor with concrete signals' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'partial', text: '~ Guardrails', aria: 'Partial: guardrails plus Pydantic output' },
-        { kind: 'partial', text: '~ Termination', aria: 'Partial: termination conditions' },
-        { kind: 'partial', text: '~ Conditional edges', aria: 'Partial: conditional edges' },
+        { kind: 'partial', text: '~ Edges', aria: 'Partial: conditional edges' },
       ],
     },
     {
@@ -70,7 +79,8 @@ const frameworksTable: CompareTable = {
       cells: [
         { kind: 'yes', text: 'stdio + HTTP', aria: 'Yes: MCP server with stdio and HTTP' },
         { kind: 'no', text: 'No', aria: 'No' },
-        { kind: 'partial', text: '~ Tool mode', aria: 'Partial: MCP tool support only' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'partial', text: '~ Tool mode', aria: 'Partial: MCP tool support only' },
       ],
     },
@@ -79,6 +89,7 @@ const frameworksTable: CompareTable = {
       onlyBernstein: true,
       cells: [
         { kind: 'yes', text: 'Native', aria: 'Yes: Native A2A protocol support' },
+        { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
@@ -92,6 +103,7 @@ const frameworksTable: CompareTable = {
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
       ],
     },
     {
@@ -102,14 +114,16 @@ const frameworksTable: CompareTable = {
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
       ],
     },
     {
       label: 'Sandbox backends',
       cells: [
         { kind: 'yes', text: '9 backends', aria: 'Yes: 9 sandbox backends' },
-        { kind: 'partial', text: '~ Docker', aria: 'Partial: Docker only' },
+        { kind: 'no', text: 'Local only', aria: 'Local desktop only' },
         { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'partial', text: '~ Docker', aria: 'Partial: Docker only' },
         { kind: 'partial', text: '~ Docker', aria: 'Partial: Docker only' },
       ],
     },
@@ -117,6 +131,7 @@ const frameworksTable: CompareTable = {
       label: 'Storage backends',
       cells: [
         { kind: 'yes', text: 'S3 / GCS / R2 / Blob', aria: 'Yes: S3, GCS, R2, Azure Blob' },
+        { kind: 'no', text: 'SQLite', aria: 'SQLite only' },
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'partial', text: '~ LangSmith', aria: 'Partial: via LangSmith' },
@@ -126,8 +141,9 @@ const frameworksTable: CompareTable = {
       label: 'Observability',
       cells: [
         { kind: 'yes', text: 'Prometheus + OTel', aria: 'Yes: Prometheus and OpenTelemetry' },
+        { kind: 'partial', text: '~ Desktop logs', aria: 'Partial: Desktop logs' },
+        { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'partial', text: '~ usage_metrics', aria: 'Partial: usage_metrics attribute' },
-        { kind: 'partial', text: '~ RequestUsage', aria: 'Partial: RequestUsage per message' },
         { kind: 'partial', text: '~ LangSmith', aria: 'Partial: via LangSmith tracer' },
       ],
     },
@@ -136,6 +152,7 @@ const frameworksTable: CompareTable = {
       onlyBernstein: true,
       cells: [
         { kind: 'yes', text: 'Built-in', aria: 'Yes: Retry and bandit built-in' },
+        { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
@@ -149,6 +166,17 @@ const frameworksTable: CompareTable = {
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
         { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+      ],
+    },
+    {
+      label: 'Primary language',
+      cells: [
+        { kind: 'text', text: 'Python' },
+        { kind: 'text', text: 'TypeScript / Electron' },
+        { kind: 'text', text: 'TypeScript' },
+        { kind: 'text', text: 'Python' },
+        { kind: 'text', text: 'Python / JS' },
       ],
     },
     {
@@ -156,135 +184,9 @@ const frameworksTable: CompareTable = {
       cells: [
         { kind: 'text', text: 'Apache-2.0' },
         { kind: 'text', text: 'MIT' },
-        { kind: 'text', text: 'MIT / CC-BY-4.0' },
         { kind: 'text', text: 'MIT' },
-      ],
-    },
-    {
-      label: 'Primary lang',
-      cells: [
-        { kind: 'text', text: 'Python' },
-        { kind: 'text', text: 'Python' },
-        { kind: 'text', text: 'Python / .NET' },
-        { kind: 'text', text: 'Python / JS' },
-      ],
-    },
-    {
-      label: 'Audience',
-      cells: [
-        { kind: 'text', text: 'Eng teams shipping code' },
-        { kind: 'text', text: 'Workflow/RAG builders' },
-        { kind: 'text', text: 'Researchers + devs' },
-        { kind: 'text', text: 'Workflow graph builders' },
-      ],
-    },
-  ],
-};
-
-const orchestratorsTable: CompareTable = {
-  headers: ['Bernstein', 'Composio', 'emdash'],
-  rows: [
-    {
-      label: 'Target user',
-      cells: [
-        { kind: 'text', text: 'Eng teams + solo devs' },
-        { kind: 'text', text: 'Solo devs' },
-        { kind: 'text', text: 'Solo devs' },
-      ],
-    },
-    {
-      label: 'Agents supported',
-      cells: [
-        { kind: 'yes', text: '18 adapters', aria: 'Yes: 18 adapters' },
-        { kind: 'partial', text: '~ 4-5', aria: 'Partial: 4 to 5 agents' },
-        { kind: 'partial', text: '~ 3-4', aria: 'Partial: 3 to 4 agents' },
-      ],
-    },
-    {
-      label: 'Git isolation',
-      cells: [
-        { kind: 'yes', text: 'Worktree / sandbox', aria: 'Yes: Worktrees or sandbox' },
-        { kind: 'partial', text: '~ Worktree', aria: 'Partial: Worktrees only' },
-        { kind: 'partial', text: '~ Worktree', aria: 'Partial: Worktrees only' },
-      ],
-    },
-    {
-      label: 'Quality gates',
-      onlyBernstein: true,
-      cells: [
-        { kind: 'yes', text: 'Built-in', aria: 'Yes: Built-in gates' },
-        { kind: 'no', text: 'No', aria: 'No' },
-        { kind: 'no', text: 'No', aria: 'No' },
-      ],
-    },
-    {
-      label: 'Cost routing',
-      onlyBernstein: true,
-      cells: [
-        { kind: 'yes', text: 'Bandit', aria: 'Yes: Bandit cost routing' },
-        { kind: 'no', text: 'No', aria: 'No' },
-        { kind: 'no', text: 'No', aria: 'No' },
-      ],
-    },
-    {
-      label: 'Bandit-based retry',
-      onlyBernstein: true,
-      cells: [
-        { kind: 'yes', text: 'Built-in', aria: 'Yes: Bandit-based retry' },
-        { kind: 'no', text: 'No', aria: 'No' },
-        { kind: 'no', text: 'No', aria: 'No' },
-      ],
-    },
-    {
-      label: 'MCP server',
-      onlyBernstein: true,
-      cells: [
-        { kind: 'yes', text: 'stdio + HTTP', aria: 'Yes: MCP server stdio and HTTP' },
-        { kind: 'no', text: 'No', aria: 'No' },
-        { kind: 'no', text: 'No', aria: 'No' },
-      ],
-    },
-    {
-      label: 'Deterministic scheduler',
-      cells: [
-        { kind: 'yes', text: 'Yes', aria: 'Yes: deterministic scheduler' },
-        { kind: 'partial', text: '~ Manual', aria: 'Partial: manual scheduling' },
-        { kind: 'partial', text: '~ Manual', aria: 'Partial: manual scheduling' },
-      ],
-    },
-    {
-      label: 'Sandbox abstraction',
-      onlyBernstein: true,
-      cells: [
-        { kind: 'yes', text: '9 backends', aria: 'Yes: 9 backends' },
-        { kind: 'no', text: 'No', aria: 'No' },
-        { kind: 'no', text: 'No', aria: 'No' },
-      ],
-    },
-    {
-      label: 'Storage abstraction',
-      onlyBernstein: true,
-      cells: [
-        { kind: 'yes', text: 'S3 / GCS / R2', aria: 'Yes: multi-cloud storage' },
-        { kind: 'no', text: 'No', aria: 'No' },
-        { kind: 'no', text: 'No', aria: 'No' },
-      ],
-    },
-    {
-      label: 'Cloud sinks',
-      onlyBernstein: true,
-      cells: [
-        { kind: 'yes', text: 'Built-in', aria: 'Yes: Cloud sinks' },
-        { kind: 'no', text: 'No', aria: 'No' },
-        { kind: 'no', text: 'No', aria: 'No' },
-      ],
-    },
-    {
-      label: 'Language',
-      cells: [
-        { kind: 'text', text: 'Python' },
-        { kind: 'text', text: 'TypeScript' },
-        { kind: 'text', text: 'TypeScript' },
+        { kind: 'text', text: 'MIT' },
+        { kind: 'text', text: 'MIT' },
       ],
     },
   ],
@@ -376,8 +278,6 @@ function CompareTableView({ table }: { table: CompareTable }) {
 }
 
 export function Compare() {
-  const [tab, setTab] = useState<'frameworks' | 'orchestrators'>('frameworks');
-
   return (
     <section id="compare" aria-labelledby="compare-heading">
       <ScrollReveal>
@@ -387,54 +287,17 @@ export function Compare() {
             <span className="compare-verified" aria-label={`Last ${LAST_VERIFIED}`}>{LAST_VERIFIED}</span>
           </div>
           <p>
-            Python-native, MCP-server-first, widest adapter coverage. Toggle between LLM-orchestration frameworks and CLI-agent orchestrators below.
+            Python-native, MCP-server-first, widest adapter coverage. One table, the dimensions that matter when you pick an orchestrator for CLI coding agents.
           </p>
         </div>
       </ScrollReveal>
       <ScrollReveal delay={160}>
-        <div className="compare-tabs" role="tablist" aria-label="Comparison category">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={tab === 'frameworks'}
-            aria-controls="compare-panel-frameworks"
-            id="compare-tab-frameworks"
-            className={`compare-tab${tab === 'frameworks' ? ' compare-tab-active' : ''}`}
-            onClick={() => setTab('frameworks')}
-          >
-            vs. LLM frameworks
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={tab === 'orchestrators'}
-            aria-controls="compare-panel-orchestrators"
-            id="compare-tab-orchestrators"
-            className={`compare-tab${tab === 'orchestrators' ? ' compare-tab-active' : ''}`}
-            onClick={() => setTab('orchestrators')}
-          >
-            vs. CLI orchestrators
-          </button>
-        </div>
+        <CompareTableView table={mergedTable} />
       </ScrollReveal>
       <ScrollReveal delay={220}>
-        {tab === 'frameworks' ? (
-          <div
-            role="tabpanel"
-            id="compare-panel-frameworks"
-            aria-labelledby="compare-tab-frameworks"
-          >
-            <CompareTableView table={frameworksTable} />
-          </div>
-        ) : (
-          <div
-            role="tabpanel"
-            id="compare-panel-orchestrators"
-            aria-labelledby="compare-tab-orchestrators"
-          >
-            <CompareTableView table={orchestratorsTable} />
-          </div>
-        )}
+        <p className="compare-footnote">
+          Bootstrapped, Apache 2.0, no hosted control plane. If the table resonates and you invest in developer infrastructure &mdash; <a href="mailto:forte@bernstein.run">forte@bernstein.run</a>.
+        </p>
       </ScrollReveal>
     </section>
   );

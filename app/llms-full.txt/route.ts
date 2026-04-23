@@ -85,7 +85,7 @@ bernstein run plans/my-project.yaml
 
 3. **Short-lived agents**: Agents handle 1-3 tasks each, then exit. No long-running agent processes. Fresh context per task prevents hallucination drift.
 
-4. **Agent-agnostic**: Works with any CLI coding agent. Currently ships 18 adapters. Adding a new agent requires implementing a simple adapter interface.
+4. **Agent-agnostic**: Works with any CLI coding agent. Currently ships 31 adapters. Adding a new agent requires implementing a simple adapter interface.
 
 5. **Model-per-task routing**: A contextual bandit router learns which model works best for each task type and complexity level. In our own runs, the bandit router cut spend roughly in half compared to uniformly using expensive models. Measure yours with bernstein cost.
 
@@ -521,7 +521,7 @@ Two comparison axes. LLM-orchestration frameworks (CrewAI / AutoGen / LangGraph)
 | Feature | Bernstein | CrewAI | AutoGen | LangGraph |
 |---------|-----------|--------|---------|-----------|
 | Orchestrator | Deterministic code | LLM-driven (+ code Flows) | LLM-driven | Graph + LLM |
-| CLI agent support | 18 adapters | No | No | No |
+| CLI agent support | 31 adapters | No | No | No |
 | Agent isolation | Worktrees or pluggable cloud sandbox | No | No | No |
 | Quality gates | Built-in | Guardrails + Pydantic output | Termination conditions | Conditional edges |
 | Cost tracking | Per-agent | \`usage_metrics\` | \`RequestUsage\` | Via LangSmith |
@@ -572,7 +572,7 @@ Bernstein is an open-source multi-agent orchestration system that coordinates AI
 Bernstein's orchestrator is deterministic Python code — no LLM tokens are spent on coordination. It works with real CLI coding agents (not API-only models) and provides git worktree isolation, quality gates, and cost tracking out of the box.
 
 ### What agents does Bernstein support?
-Bernstein ships 18 adapters for popular coding agents including Claude Code, Codex CLI, Gemini CLI, OpenAI Agents SDK, Cursor, Aider, Amp, Ollama, and more. It also has a generic adapter for wrapping any CLI tool.
+Bernstein ships 31 adapters for popular coding agents including Claude Code, Codex CLI, Gemini CLI, OpenAI Agents SDK, Cursor, Aider, Amp, Ollama, GitHub Copilot, Droid, Crush, and more. It also has a generic adapter for wrapping any CLI tool.
 
 ### How does task routing work?
 Bernstein uses a contextual bandit (epsilon-greedy) router that learns which model works best for each task type and complexity. Simple tasks go to cheaper models (Haiku, Flash), complex architecture tasks go to expensive models (Opus). In our own runs, the bandit router cut spend roughly in half compared to using expensive models for everything. Measure yours with bernstein cost.

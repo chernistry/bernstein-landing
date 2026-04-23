@@ -29,10 +29,10 @@ const pillars: Pillar[] = [
         ),
       },
       {
-        title: '18 adapters',
+        title: '31 adapters',
         snippet: 'agents: [claude, codex, gemini, ...]',
         body: (
-          <>Claude Code, Codex, Gemini CLI, OpenAI Agents SDK, Aider, Cloudflare Agents, and 12 more. Mix models in one run. Switch providers without changing config.</>
+          <>Claude Code, Codex, Gemini CLI, OpenAI Agents SDK, GitHub Copilot, Droid, Crush, and 24 more. Mix models in one run. Switch providers without changing config.</>
         ),
       },
       {
