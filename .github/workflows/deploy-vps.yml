@@ -41,7 +41,14 @@ jobs:
             git fetch origin master
             git checkout master
             git pull --ff-only origin master
-            docker compose up -d --build --remove-orphans
+            # Tear down the previous stack so the explicit container_name in
+            # compose.yaml cannot collide with a leftover container that a
+            # prior deploy left behind (e.g. after a crashed run).
+            docker compose down --remove-orphans || true
+            # Belt-and-braces: remove any container still holding the name,
+            # whether or not compose recognises it.
+            docker rm -f bernstein-landing >/dev/null 2>&1 || true
+            docker compose up -d --build --remove-orphans --force-recreate
             docker image prune -f >/dev/null 2>&1 || true
           '
 
