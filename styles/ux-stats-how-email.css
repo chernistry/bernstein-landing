@@ -132,5 +132,5 @@
 .how-diagram .how-t-muted { fill: var(--text-muted); }
 .how-diagram .how-t-ok { fill: var(--green); }
 .how-diagram .how-t-fail { fill: var(--red); }
-.how-diagram .how-t-amber { fill: var(--text); }
+.how-diagram .how-t-janitor { fill: var(--text); }
 .how-diagram .how-t-accent { fill: var(--accent-hover); }
