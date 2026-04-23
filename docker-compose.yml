@@ -1,3 +1,5 @@
+name: bernstein-landing
+
 services:
   bernstein-landing:
     build: .
