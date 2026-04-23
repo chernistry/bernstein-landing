@@ -1,4 +1,5 @@
 import { CopyButton } from '@/components/CopyButton';
+import { fetchPackageStats, formatDownloadsProof } from '@/lib/pkg-stats';
 import { HeroBackground } from './HeroBackground';
 
 function AgentTerminal() {
@@ -46,7 +47,13 @@ function AgentTerminal() {
   );
 }
 
-export function Hero() {
+export async function Hero() {
+  const { monthly_downloads } = await fetchPackageStats();
+  const downloads = formatDownloadsProof(monthly_downloads);
+  const proofLine = downloads
+    ? `${downloads} monthly downloads · Apache 2.0 · 18 agent adapters`
+    : 'Apache 2.0 · 18 agent adapters · Open source';
+
   return (
     <div className="hero hero-split">
       <HeroBackground />
@@ -72,9 +79,7 @@ export function Hero() {
           <div className="install-code"><span className="prompt">$</span> <span className="cmd">pipx install bernstein</span><span className="cursor" /></div>
           <CopyButton text="pipx install bernstein" />
         </div>
-        <p className="hero-proof">
-          9,000+ monthly downloads · Apache 2.0 · 18 agent adapters
-        </p>
+        <p className="hero-proof">{proofLine}</p>
       </div>
       <div className="hero-visual">
         <AgentTerminal />
