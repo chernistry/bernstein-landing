@@ -1,0 +1,145 @@
+---
+title: "Four commands that take the glue code out of multi-agent runs"
+description: "Bernstein v1.8.14 ships four operator-experience commands — pr, from-ticket, remote, and hooks — that replace the shell glue most teams end up writing around their agent runs."
+date: "2026-04-24"
+tags: ["multi-agent orchestration", "developer experience", "CLI tools", "AI coding agents", "Bernstein", "Linear integration", "Jira integration", "GitHub integration", "SSH"]
+---
+
+<Lead>
+After a Bernstein session finishes, most teams end up running the same four shell snippets by hand: open a PR with the results, copy a ticket into a task, kick off a run on a beefier remote host, and fire a post-merge hook. Bernstein v1.8.14 turns all four into first-class commands.
+</Lead>
+
+## The glue-code tax
+
+A healthy multi-agent workflow looks simple from the outside — "you set a goal, four agents work on it in isolated worktrees, the janitor verifies, the merge queue lands what passes." In practice, teams that run this daily end up with a `scripts/` directory full of wrappers:
+
+- A `post-run.sh` that runs `git push && gh pr create --body "$(cat last-run-summary.md)"` with a hand-rolled summary.
+- A Python one-liner that reads a Linear webhook, extracts the task body, and `curl`s Bernstein's task server.
+- A `ssh-run.sh` that rsyncs a repo to a build box, starts a screen session, and tails logs.
+- A `.git/hooks/pre-commit` that checks the janitor's JSON output against a concrete policy.
+
+Each of these is ~30 lines. Each is slightly wrong somewhere — missing auth env var, wrong PATH, no retry, no graceful cleanup. The v1.8.14 operator pack takes the four most common ones and ships them as composable subcommands that share Bernstein's state model.
+
+## `bernstein pr` — open a PR with the janitor's receipts
+
+Instead of hand-writing a PR description, generate one from the session that produced the branch:
+
+```bash
+bernstein pr --session-id last --draft
+```
+
+The command reads `.sdd/sessions/<id>-wrapup.json`, the janitor's gate results, and the cost tracker, and opens a GitHub PR with a conventional-commit title plus a markdown body like this:
+
+```markdown
+## Summary
+- Add JWT auth with refresh tokens
+- Cover the refresh endpoint with tests
+- Document the new /auth/* routes
+
+## Changes
+src/auth/middleware.py   | 74 +++++
+tests/test_auth.py       | 112 ++++++++
+docs/auth.md             |  42 ++++
+
+## Verification
+✅ lint (ruff: 0 findings)
+✅ types (pyright: 0 errors)
+✅ tests (pytest: 48 passed)
+✅ security (semgrep: clean)
+
+## Cost
+$0.38 · 182,410 tokens
+  manager:   $0.04
+  engineer:  $0.27
+  qa:        $0.07
+
+Generated from Bernstein session 7c4f1a3b9d22.
+```
+
+Flags: `--base`, `--title`, `--draft`, `--dry-run`, `--no-push`, `--session-id`. The conventional-commit prefix is inferred from task goal + primary role (a `docs`-heavy session gets `docs:`, a bugfix gets `fix:`, the default is `feat:`).
+
+## `bernstein from-ticket <url>` — turn a ticket into a task
+
+You already wrote the work description once, in the ticket. The fetcher pulls it straight into a Bernstein task:
+
+```bash
+bernstein from-ticket https://linear.app/acme/issue/ENG-412 --run
+```
+
+Three providers are supported out of the box:
+
+- **Linear** — GraphQL via `LINEAR_API_KEY`.
+- **GitHub Issues** — uses your local `gh` CLI credentials when available, falls back to `GITHUB_TOKEN` + the REST API.
+- **Jira Cloud** — REST v3 via `JIRA_EMAIL` + `JIRA_API_TOKEN`.
+
+Labels on the ticket drive Bernstein's role and scope inference. A `bug` label routes to `qa`; `docs` routes to `docs`; `epic` bumps the scope from `medium` to `large`. The source metadata (provider + external ID + URL) gets stashed on the task so downstream tooling can round-trip it.
+
+Add `--run` and the command immediately dispatches the task on your local task server. Drop it for `--dry-run` and you get a preview:
+
+```
+Task preview
+  goal:       "Migrate session store to Redis"
+  role:       backend
+  scope:      medium
+  priority:   medium
+  source:     linear / ENG-412
+  assignee:   dmitri
+```
+
+## `bernstein remote` — an SSH sandbox for agents
+
+When a run is heavier than your laptop — large test matrix, GPU-bound model calls, a staging database — running it on a VPS is often faster than moving the workload to a cloud sandbox. `bernstein remote` wraps that path:
+
+```bash
+# Smoke-check the connection
+bernstein remote test build-box-1
+
+# Dispatch a run
+bernstein remote run build-box-1 ~/work/bernstein --user alex --port 22
+```
+
+Under the hood it registers an SSH-backed `SandboxBackend` with:
+
+- **ControlMaster reuse.** The first call opens a multiplexed socket at `~/.ssh/bernstein-<host>-<pid>.sock`; subsequent commands reuse it. Per-session overhead drops from ~500ms to ~30ms.
+- **ConnectTimeout=10, ServerAliveInterval=30** so a flaky network doesn't hang the run.
+- **Error translation.** `Connection refused` becomes `SandboxConnectionError(host=..., hint="check that sshd is running on port X")`. `Permission denied` suggests `ssh-add` or an `IdentityFile` entry in `~/.ssh/config`.
+
+Artifacts live on the remote box for the duration of the run. `bernstein remote forget <host>` tears down the ControlMaster socket when you're done.
+
+## `bernstein hooks` — pre/post lifecycle hooks
+
+The orchestrator emits six events: `pre_task`, `post_task`, `pre_merge`, `post_merge`, `pre_spawn`, `post_spawn`. You can hook any of them with a shell script, a Python callable, or a pluggy `@hookimpl`:
+
+```yaml
+# bernstein.yaml
+hooks:
+  pre_task:
+    - script: "scripts/check-branch.sh"
+      timeout: 10
+  post_merge:
+    - script: "scripts/notify-slack.sh"
+    - plugin: "bernstein_plugin_jira"    # pluggy-registered handler
+```
+
+Shell hooks get a JSON payload on stdin plus `BERNSTEIN_EVENT`, `BERNSTEIN_TASK_ID`, `BERNSTEIN_SESSION_ID`, `BERNSTEIN_WORKDIR` on the env. Env inheritance is whitelisted (`PATH`, `HOME`, `USER`, `BERNSTEIN_*`) to avoid leaking credentials into third-party scripts. Stdout is truncated at 10 MB. A non-zero exit from a `pre_*` hook aborts the event — useful for "don't spawn an agent if there are uncommitted changes."
+
+Three subcommands round it out: `hooks list` prints the registered hooks per event, `hooks run <event>` fires one with an empty context (useful for debugging), `hooks check` validates that every script path exists and is executable.
+
+## Why they compose
+
+All four read the same `.sdd/` state Bernstein already maintains. That means:
+
+1. `bernstein from-ticket https://linear.app/acme/issue/ENG-412 --run`
+2. …agent runs on the SSH-backed sandbox via `bernstein remote run build-box-1 .`…
+3. `bernstein pr --session-id last` once the janitor signs off.
+4. `post_merge` hook fires the Slack notification and closes the Linear ticket.
+
+No ad-hoc glue, no drifting scripts between `~/work/*/scripts/`. The session metadata that flowed from ticket → task → merge is still there if you need to replay or audit.
+
+## What's still missing
+
+- No GitLab or Bitbucket ticket providers yet — open an issue if you want them (the provider interface is one small file per source).
+- SSH sandbox uses the OpenSSH binary, not paramiko. Works everywhere OpenSSH does, but you can't embed it in a pure-Python deployment. If that matters for you, the `SandboxBackend` protocol is stable — a paramiko adaptation is ~200 lines.
+- The PR generator targets GitHub only. A GitLab backend is a small follow-up — the gate-result + cost-tracker plumbing is already provider-agnostic.
+
+Grab it with `pipx install 'bernstein>=1.8.14'`, try `bernstein pr --help`, and let us know what the next glue-code item on your list is.
