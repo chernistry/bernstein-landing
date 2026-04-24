@@ -166,6 +166,14 @@ const FAQ_JSON_LD = {
         text: 'Instead of loading every role prompt at startup, Bernstein ships skills as progressive-disclosure packs. Agents start with a short system prompt and pull extra context on demand through the load_skill MCP tool — only the skills a task actually needs are paid for in tokens. Skills are versioned bundles under templates/skills/ and can be added without shipping a release.',
       },
     },
+    {
+      '@type': 'Question',
+      name: 'Can I drive Bernstein from chat or a remote host?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. `bernstein chat serve --platform=telegram` (also Discord/Slack) runs a bot that takes /run, /status, /approve, /reject, /switch, and /stop from your chat thread. `bernstein remote run <host> <path>` dispatches a run over SSH with ControlMaster socket reuse. `bernstein tunnel start <port>` wraps cloudflared / ngrok / bore / tailscale for exposing a local service. `bernstein daemon install` installs the orchestrator as a systemd or launchd unit for auto-start.',
+      },
+    },
   ],
 };
 

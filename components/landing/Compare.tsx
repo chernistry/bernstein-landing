@@ -170,6 +170,72 @@ const mergedTable: CompareTable = {
       ],
     },
     {
+      label: 'Chat bridges',
+      onlyBernstein: true,
+      cells: [
+        { kind: 'yes', text: 'Telegram live', aria: 'Yes: Telegram live' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+      ],
+    },
+    {
+      label: 'Remote SSH',
+      onlyBernstein: true,
+      cells: [
+        { kind: 'yes', text: 'ControlMaster reuse', aria: 'Yes: ControlMaster reuse' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+      ],
+    },
+    {
+      label: 'Lifecycle hooks',
+      onlyBernstein: true,
+      cells: [
+        { kind: 'yes', text: 'pre/post × 3', aria: 'Yes: pre/post times 3' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+      ],
+    },
+    {
+      label: 'Auto-PR generation',
+      onlyBernstein: true,
+      cells: [
+        { kind: 'yes', text: 'janitor + cost body', aria: 'Yes: janitor plus cost body' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+      ],
+    },
+    {
+      label: 'Tunnel wrapper',
+      onlyBernstein: true,
+      cells: [
+        { kind: 'yes', text: '4 providers', aria: 'Yes: 4 providers' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+      ],
+    },
+    {
+      label: 'Interactive approval',
+      onlyBernstein: true,
+      cells: [
+        { kind: 'yes', text: 'TUI + web + CLI', aria: 'Yes: TUI plus web plus CLI' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+        { kind: 'no', text: 'No', aria: 'No' },
+      ],
+    },
+    {
       label: 'Primary language',
       cells: [
         { kind: 'text', text: 'Python' },

@@ -261,6 +261,19 @@ Trigger self-evolution: Bernstein plans and executes improvements to itself.
 ### \`bernstein cost\`
 Show cost breakdown per agent, per model, per task.
 
+### Operator commands
+
+- \`bernstein pr\` — generate a pull request from the current worktree, with a janitor-cleaned diff and a cost-summary body.
+- \`bernstein from-ticket <id>\` — materialize a run directly from a tracker ticket (GitHub, Linear, Jira) as the goal.
+- \`bernstein ticket\` — create, list, and sync orchestration tickets against the configured tracker backend.
+- \`bernstein remote run <host> <path>\` — dispatch a run on a remote host over SSH with ControlMaster socket reuse for fast repeats.
+- \`bernstein hooks\` — register and run lifecycle hooks (pre/post for run, task, merge — six slots total).
+- \`bernstein chat serve --platform=telegram\` — run a chat bot (Telegram, Discord, Slack) that accepts /run, /status, /approve, /reject, /switch, /stop from a thread.
+- \`bernstein approve-tool\` — interactively approve a pending tool-call via TUI, web, or CLI.
+- \`bernstein reject-tool\` — reject a pending tool-call from the same three surfaces.
+- \`bernstein tunnel start <port>\` — wrap cloudflared / ngrok / bore / tailscale to expose a local service.
+- \`bernstein daemon install\` — install the orchestrator as a systemd (Linux) or launchd (macOS) unit for auto-start.
+
 ---
 
 ## Task Server API
