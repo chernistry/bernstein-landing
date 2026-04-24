@@ -347,3 +347,65 @@
     transition: none;
   }
 }
+
+/* ---------------- ANCHOR LINK ON HEADINGS ---------------- */
+.prose .mdx-heading {
+  position: relative;
+  scroll-margin-top: 72px;
+}
+
+.prose .anchor-link {
+  position: absolute;
+  left: -22px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.15s ease-out, color 0.15s ease-out;
+  border-bottom: none !important;
+}
+.prose .mdx-heading:hover .anchor-link,
+.prose .anchor-link:focus-visible {
+  opacity: 1;
+}
+.prose .anchor-link:hover {
+  color: var(--accent-hover);
+}
+
+.anchor-link-toast {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--accent-hover);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.anchor-link-toast:empty {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* On narrow viewports leave the anchor inline at the end of the heading
+     so it doesn't push the left margin out of the content column. */
+  .prose .anchor-link {
+    position: static;
+    transform: none;
+    margin-left: 8px;
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prose .anchor-link {
+    transition: none;
+  }
+}

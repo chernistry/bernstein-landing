@@ -1,0 +1,59 @@
+---
+title: "The install we should have shipped at launch"
+description: "Bernstein now has a real curl | sh one-liner. It was never going to ship until an open-source contributor picked up the issue and drove it through every awkward edge case."
+date: "2026-04-24"
+tags: ["open source", "developer experience", "onboarding", "CLI installers", "pipx", "PowerShell", "community"]
+---
+
+<Lead>
+For the first three months of Bernstein's life, the install story was "have Python 3.12+, have pipx, then run `pipx install bernstein`." Which sounds fine. Which is not fine for the 60% of readers who have neither.
+</Lead>
+
+## The awkward gap
+
+When you launch a Python CLI on PyPI, the README says `pipx install <x>` and the maintainer pats themselves on the back. Then a real person shows up. Their laptop has Python 3.10 from Homebrew. Or Python 3.12 from the macOS installer but no pipx. Or Python installed through Microsoft Store with a busted PATH. The install page says "pipx install bernstein". The reader types it. The terminal says `zsh: command not found: pipx`.
+
+That's where a lot of would-be users quietly close the tab.
+
+Bernstein shipped like that for three months. I knew it was a problem — I even filed an issue titled "one-line install script (curl | sh) with OS detection" back in April. It stayed in the backlog because it wasn't technically hard, which is exactly the kind of task that never gets done in a solo project: too mundane for the founder, too peripheral to be sprint-worthy.
+
+## The one-liner
+
+Today it's gone. Install is:
+
+```bash
+curl -fsSL https://bernstein.run/install.sh | sh
+```
+
+Windows (PowerShell):
+
+```powershell
+irm https://bernstein.run/install.ps1 | iex
+```
+
+Behind the scenes each script:
+
+1. Checks for Python 3.12+ with a real interpreter call (not parsing `python --version`).
+2. Runs `ensurepip` if pip is missing.
+3. Installs pipx with `pip install --user --upgrade pipx` if it's not already on PATH.
+4. Fixes PATH for the current shell so the freshly-installed binary is visible *right now*, not after a restart.
+5. Installs (or upgrades) Bernstein.
+
+Edge cases the author actually thought about: brew-managed Python on Apple Silicon, the Windows `py -3` launcher fallback, sessions where `pip install --user` drops binaries into a directory that isn't on PATH yet. All of them handled. The shell script is 67 lines.
+
+## The part that didn't happen in a vacuum
+
+I didn't write those scripts. [@vedangit](https://github.com/vedangit) asked to pick up the issue, spent a couple of evenings on it, and drove it through every edge case with a calm and patient back-and-forth — including the brew environments and the Windows paths. Other people showed up to check the PR, gave it a thumbs-up, asked smart questions. The whole arc, from issue to merged PR, is the [one I'd point to](https://github.com/chernistry/bernstein/pull/923) as the healthiest shape of an open-source contribution: the maintainer writes the requirements clearly, the contributor owns the implementation, both sides trust the other to do their half without micromanaging.
+
+Thanks, Vedangi. The tab-close rate just dropped.
+
+## Also in v1.8.14
+
+While we're here — the same release brings adapter coverage to **31 CLI coding agents** (every mainstream one on the market), and four new operator-experience commands: `bernstein pr`, `from-ticket`, `remote`, and `hooks`. The longer write-up is in the [previous post](/blog/operator-pack).
+
+Try it:
+
+```bash
+curl -fsSL https://bernstein.run/install.sh | sh
+bernstein -g "your first goal here"
+```
