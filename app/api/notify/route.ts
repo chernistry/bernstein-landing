@@ -111,33 +111,27 @@ Occasional notes from bernstein.run. No daily noise.&#8202;&#8202;&#8202;&#8202;
           </td>
         </tr>
 
-        <!-- Body -->
+        <!-- Body. No CTA: subscriber already subscribed; the only useful next
+             action is the quiet reply-prompt below. -->
         <tr>
           <td class="pad-x" style="padding:24px 48px 8px 48px;">
             <p class="secondary" style="margin:0 0 24px 0;font-family:${FONT_BODY};font-size:16px;line-height:1.65;color:#3F3F46;">
               You&rsquo;ll get occasional notes from bernstein.run &mdash; only when there&rsquo;s something actually worth opening. Releases, an essay, the very rare announcement.
             </p>
 
-            <p class="secondary" style="margin:0 0 40px 0;font-family:${FONT_BODY};font-size:16px;line-height:1.65;color:#3F3F46;">
+            <p class="secondary" style="margin:0 0 24px 0;font-family:${FONT_BODY};font-size:16px;line-height:1.65;color:#3F3F46;">
               No daily noise. No drip campaigns. No &ldquo;just checking in.&rdquo;
             </p>
 
-            <!-- Bulletproof CTA: bgcolor on td + explicit color on nested span -->
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 40px 0;">
-              <tr>
-                <td class="btn-cell" align="center" bgcolor="#0A0A0A" style="border-radius:8px;background:#0A0A0A;">
-                  <a href="https://bernstein.run/quickstart" target="_blank" style="display:inline-block;padding:14px 28px;font-family:${FONT_BODY};font-size:15px;font-weight:500;line-height:1;text-decoration:none;border-radius:8px;letter-spacing:-0.005em;">
-                    <span class="btn-text" style="color:#FFFFFF;">Open the quickstart</span>
-                  </a>
-                </td>
-              </tr>
-            </table>
-
-            <p class="secondary" style="margin:0 0 8px 0;font-family:${FONT_BODY};font-size:15px;line-height:1.65;color:#3F3F46;">
-              If anything breaks, surprises you, or feels missing &mdash; reply to this email. It lands in my inbox.
+            <p class="secondary" style="margin:0 0 8px 0;font-family:${FONT_BODY};font-size:16px;line-height:1.65;color:#3F3F46;">
+              If you want to poke at what&rsquo;s shipped so far, the blog is at <a href="https://bernstein.run/blog" style="color:#0A0A0A;text-decoration:underline;">bernstein.run/blog</a>. Otherwise, sit tight &mdash; nothing is required of you.
             </p>
 
-            <p class="ink" style="margin:24px 0 0 0;font-family:${FONT_BODY};font-size:16px;line-height:1.65;color:#0A0A0A;">
+            <p class="secondary" style="margin:24px 0 0 0;font-family:${FONT_BODY};font-size:16px;line-height:1.65;color:#3F3F46;">
+              And if anything ever feels off &mdash; reply to this email. Lands in my inbox.
+            </p>
+
+            <p class="ink" style="margin:32px 0 0 0;font-family:${FONT_BODY};font-size:16px;line-height:1.65;color:#0A0A0A;">
               &mdash; Alex
             </p>
           </td>
