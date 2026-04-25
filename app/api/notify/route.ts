@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server';
+import { buildUnsubUrl } from '@/lib/unsub';
+
+const SITE_ORIGIN = process.env.BERNSTEIN_PUBLIC_ORIGIN ?? 'https://bernstein.run';
 
 /**
  * Bernstein newsletter signup endpoint.
@@ -42,7 +45,7 @@ async function createContact(apiKey: string, email: string): Promise<Response> {
   });
 }
 
-function confirmationHtml(): string {
+function confirmationHtml(unsubUrl: string): string {
   // Cleaned-up email: drops the global `a` color reset that was killing the
   // CTA contrast (dark text on dark button), drops the install code block
   // that competed with the CTA for attention, and bumps paragraph spacing.
@@ -156,7 +159,7 @@ Occasional notes from bernstein.run. No daily noise.&#8202;&#8202;&#8202;&#8202;
               Bernstein &middot; Unit 4, Park Royal Business Centre, 9&ndash;17 Park Royal Road, London NW10 7LQ, United Kingdom
             </p>
             <p class="muted" style="margin:0;font-family:${FONT_BODY};font-size:12px;line-height:1.6;color:#8A8A92;">
-              Don&rsquo;t want these? <a class="footer-link" href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color:#8A8A92;text-decoration:underline;">Unsubscribe</a>.
+              Don&rsquo;t want these? <a class="footer-link" href="${unsubUrl}" style="color:#8A8A92;text-decoration:underline;">Unsubscribe</a>.
             </p>
           </td>
         </tr>
@@ -172,6 +175,14 @@ Occasional notes from bernstein.run. No daily noise.&#8202;&#8202;&#8202;&#8202;
 }
 
 async function sendConfirmation(apiKey: string, email: string): Promise<void> {
+  // Sign a per-email unsub URL pointing at our /api/unsubscribe endpoint.
+  // Resend does NOT substitute {{{RESEND_UNSUBSCRIBE_URL}}} on direct
+  // POST /emails (only on broadcasts/templates), so we self-sign.
+  const unsubUrl = buildUnsubUrl({
+    origin: SITE_ORIGIN,
+    audienceId: BERNSTEIN_AUDIENCE_ID,
+    email,
+  });
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
@@ -179,8 +190,12 @@ async function sendConfirmation(apiKey: string, email: string): Promise<void> {
       from: FROM,
       to: [email],
       subject: SUBJECT,
-      html: confirmationHtml(),
-      headers: { 'List-Unsubscribe': '<{{{RESEND_UNSUBSCRIBE_URL}}}>' },
+      html: confirmationHtml(unsubUrl),
+      // RFC 8058 one-click headers + RFC 2369 mailto fallback.
+      headers: {
+        'List-Unsubscribe': `<${unsubUrl}>, <mailto:unsubscribe@bernstein.run>`,
+        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+      },
     }),
   });
   if (!r.ok) {

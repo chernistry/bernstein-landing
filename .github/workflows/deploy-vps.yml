@@ -34,14 +34,20 @@ jobs:
           VPS_DEPLOY_PORT: ${{ secrets.VPS_DEPLOY_PORT }}
           VPS_DEPLOY_USER: ${{ secrets.VPS_DEPLOY_USER }}
           RESEND_API_KEY_BERNSTEIN: ${{ secrets.RESEND_API_KEY_BERNSTEIN }}
+          UNSUB_SIGNING_SECRET: ${{ secrets.UNSUB_SIGNING_SECRET }}
         run: |
           set -euo pipefail
-          # Pipe the .env content through SSH stdin so the secret never
-          # appears in the remote command-line / process list.
-          printf 'RESEND_API_KEY_BERNSTEIN=%s\n' "${RESEND_API_KEY_BERNSTEIN}" | \
+          # Pipe the .env content through SSH stdin so secrets never
+          # appear in the remote command-line / process list.
+          {
+            printf 'RESEND_API_KEY_BERNSTEIN=%s\n' "${RESEND_API_KEY_BERNSTEIN}"
+            printf 'UNSUB_SIGNING_SECRET=%s\n'    "${UNSUB_SIGNING_SECRET}"
+          } | \
             ssh -i ~/.ssh/id_ed25519 -p "${VPS_DEPLOY_PORT:-22}" \
               "${VPS_DEPLOY_USER}@${VPS_DEPLOY_HOST}" \
               "umask 077 && mkdir -p /srv/bernstein-landing/app && cat > /srv/bernstein-landing/app/.env"
+
+      - uses: actions/checkout@v4
 
       - name: Deploy to VPS
         shell: bash
@@ -51,18 +57,24 @@ jobs:
           VPS_DEPLOY_USER: ${{ secrets.VPS_DEPLOY_USER }}
         run: |
           set -euo pipefail
+          # rsync the checked-out source over SSH (the VPS git remote is
+          # HTTPS and lacks credentials, so 'git pull' on the VPS used to
+          # fail with exit 128). --delete keeps the VPS tree byte-identical
+          # to master, except for .env (written by the previous step).
+          rsync -az --delete \
+            --exclude='.env' \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='.next' \
+            -e "ssh -i ~/.ssh/id_ed25519 -p ${VPS_DEPLOY_PORT:-22}" \
+            ./ "${VPS_DEPLOY_USER}@${VPS_DEPLOY_HOST}:/srv/bernstein-landing/app/"
           ssh -i ~/.ssh/id_ed25519 -p "${VPS_DEPLOY_PORT:-22}" "${VPS_DEPLOY_USER}@${VPS_DEPLOY_HOST}" '
             set -euo pipefail
             cd /srv/bernstein-landing/app
-            git fetch origin master
-            git checkout master
-            git pull --ff-only origin master
             # Tear down the previous stack so the explicit container_name in
             # compose.yaml cannot collide with a leftover container that a
             # prior deploy left behind (e.g. after a crashed run).
             docker compose down --remove-orphans || true
-            # Belt-and-braces: remove any container still holding the name,
-            # whether or not compose recognises it.
             docker rm -f bernstein-landing >/dev/null 2>&1 || true
             docker compose up -d --build --remove-orphans --force-recreate
             docker image prune -f >/dev/null 2>&1 || true
