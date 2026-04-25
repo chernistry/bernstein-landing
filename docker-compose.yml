@@ -5,6 +5,12 @@ services:
     build: .
     container_name: bernstein-landing
     restart: unless-stopped
+    env_file:
+      # On the VPS at /srv/bernstein-landing/app/.env, set:
+      #   RESEND_API_KEY_BERNSTEIN=re_...
+      # Optional override:
+      #   BERNSTEIN_AUDIENCE_ID=da86b0ba-b5e9-4e7d-90de-5911b417a39d
+      - .env
     networks:
       - deploy_homepage
 
