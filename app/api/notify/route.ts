@@ -19,7 +19,7 @@ const BERNSTEIN_AUDIENCE_ID =
   process.env.BERNSTEIN_AUDIENCE_ID ?? 'da86b0ba-b5e9-4e7d-90de-5911b417a39d';
 
 const FROM = 'Bernstein <hello@bernstein.run>';
-const SUBJECT = 'Welcome to Bernstein';
+const SUBJECT = 'Welcome.';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -43,24 +43,149 @@ async function createContact(apiKey: string, email: string): Promise<Response> {
 }
 
 function confirmationHtml(): string {
+  // Apple-tier email: system font stack, single column 560px, refined dark navy
+  // accents, monospaced micro-eyebrow, dark-mode-aware. Hand-tuned table layout
+  // for Outlook on Windows compatibility.
+  const FONT_BODY = `-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", system-ui, Roboto, Helvetica, Arial, sans-serif`;
+  const FONT_MONO = `ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace`;
   return `<!doctype html>
-<html><body style="font-family:ui-sans-serif,system-ui,sans-serif;color:#171717;background:#fff;margin:0;padding:24px">
-<table style="max-width:560px;margin:0 auto;padding:24px"><tr><td>
-<h1 style="font-size:22px;font-weight:600;margin:0 0 16px">Welcome to Bernstein.</h1>
-<p style="font-size:15px;line-height:1.55;margin:0 0 16px">You signed up for occasional notes from <strong>bernstein.run</strong>: the OSS CLI, the cloud add-ons, and the consulting work that uses them. No daily noise — only when there is actually something worth opening.</p>
-<p style="font-size:15px;line-height:1.55;margin:0 0 16px">If you want to start poking at Bernstein right now, the 60-second quickstart is here:</p>
-<p style="margin:24px 0"><a href="https://bernstein.run/quickstart" style="background:#171717;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:500">Open quickstart</a></p>
-<p style="font-size:15px;line-height:1.55;margin:0 0 16px">Reply to this email if anything is broken, surprising, or missing — it goes straight to my inbox.</p>
-<p style="font-size:15px;line-height:1.55;margin:0">— Alex</p>
-<hr style="border:none;border-top:1px solid #eaeaea;margin:32px 0">
-<p style="font-size:12px;color:#737373;line-height:1.55;margin:0">
-<a href="https://bernstein.run" style="color:#737373">bernstein.run</a> · Bernstein · Unit 4, Park Royal Business Centre, 9-17 Park Royal Road, London NW10 7LQ, United Kingdom
-</p>
-<p style="font-size:12px;color:#737373;line-height:1.55;margin:8px 0 0">
-Don't want these? <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color:#737373">Unsubscribe</a>.
-</p>
-</td></tr></table>
-</body></html>`;
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<title>Welcome.</title>
+<style>
+  /* Reset for known offenders */
+  body, table, td, p, h1 { margin: 0; padding: 0; }
+  img { border: 0; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+  table { border-collapse: collapse !important; }
+  a { color: #1A1F2E; text-decoration: none; }
+  /* Hover/active for clients that honor it */
+  .btn:hover { background: #2A2F3E !important; }
+  /* Mobile */
+  @media only screen and (max-width: 480px) {
+    .container { width: 100% !important; padding-left: 24px !important; padding-right: 24px !important; }
+    .h1 { font-size: 26px !important; line-height: 1.2 !important; }
+    .pad-y { padding-top: 32px !important; padding-bottom: 32px !important; }
+  }
+  /* Dark mode — Bernstein looks great here, lean in */
+  @media (prefers-color-scheme: dark) {
+    body, .bg { background: #0B0C10 !important; }
+    .surface { background: #0B0C10 !important; }
+    .ink { color: #F5F5F7 !important; }
+    .secondary { color: #A0A0AB !important; }
+    .muted { color: #737380 !important; }
+    .rule { border-color: #2A2B33 !important; }
+    .accent-rule { background: #A0B0D8 !important; }
+    .eyebrow { color: #A0B0D8 !important; }
+    .btn { background: #F5F5F7 !important; color: #0A0A0A !important; }
+    .btn:hover { background: #FFFFFF !important; }
+    .code-inline { background: #1A1B22 !important; color: #E5E5EA !important; }
+    .footer-link { color: #737380 !important; }
+  }
+  /* iOS auto-link suppression for Park Royal address */
+  .appleAddress a { color: #737373 !important; text-decoration: none !important; pointer-events: none; cursor: default; }
+</style>
+</head>
+<body class="bg" style="margin:0;padding:0;background:#FAFAFA;font-family:${FONT_BODY};-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;">
+<!-- Preheader: invisible preview text -->
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#FAFAFA;opacity:0;">
+Occasional notes from bernstein.run. No daily noise.&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;&#8202;
+</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="bg" style="background:#FAFAFA;">
+  <tr>
+    <td align="center" style="padding:0;">
+      <!--[if mso]>
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td>
+      <![endif]-->
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="container surface" style="max-width:600px;width:100%;background:#FFFFFF;">
+        <!-- Thin dark accent rule at top -->
+        <tr><td class="accent-rule" style="height:3px;background:#1A1F2E;line-height:3px;font-size:0;">&nbsp;</td></tr>
+        <!-- Hero -->
+        <tr>
+          <td class="pad-y" style="padding:48px 40px 32px 40px;">
+            <p class="eyebrow" style="margin:0 0 20px 0;font-family:${FONT_MONO};font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#1A1F2E;">
+              bernstein.run
+            </p>
+            <h1 class="h1 ink" style="margin:0;font-family:${FONT_BODY};font-size:30px;line-height:1.18;font-weight:600;letter-spacing:-0.025em;color:#0A0A0A;">
+              You're subscribed.
+            </h1>
+          </td>
+        </tr>
+        <!-- Body -->
+        <tr>
+          <td style="padding:0 40px 8px 40px;">
+            <p class="ink" style="margin:0 0 18px 0;font-family:${FONT_BODY};font-size:16px;line-height:1.6;color:#1F1F23;">
+              Thanks for signing up. You'll get occasional notes from <strong style="font-weight:600;">bernstein.run</strong> &mdash; only when there is something actually worth opening.
+            </p>
+            <p class="secondary" style="margin:0 0 18px 0;font-family:${FONT_BODY};font-size:16px;line-height:1.6;color:#5C5C66;">
+              Three threads run through what shows up here: the open-source CLI, the cloud add-ons that extend it, and the occasional consulting work that puts both into production. No daily noise. No drip campaigns.
+            </p>
+            <p class="secondary" style="margin:0 0 32px 0;font-family:${FONT_BODY};font-size:16px;line-height:1.6;color:#5C5C66;">
+              If you want to start poking around now, the quickstart is a single command:
+            </p>
+            <!-- Inline code block -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 32px 0;">
+              <tr>
+                <td class="code-inline" style="background:#F4F4F5;border-radius:8px;padding:14px 18px;font-family:${FONT_MONO};font-size:14px;line-height:1.5;color:#0A0A0A;">
+                  <span style="color:#737380;">$</span>&nbsp;curl&nbsp;-fsSL&nbsp;https://bernstein.run/install.sh&nbsp;|&nbsp;sh
+                </td>
+              </tr>
+            </table>
+            <!-- CTA -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 32px 0;">
+              <tr>
+                <td align="center" style="border-radius:10px;background:#1A1F2E;">
+                  <a class="btn" href="https://bernstein.run/quickstart" style="display:inline-block;padding:13px 26px;font-family:${FONT_BODY};font-size:15px;font-weight:600;color:#FFFFFF;text-decoration:none;border-radius:10px;letter-spacing:-0.005em;">
+                    Open quickstart &rarr;
+                  </a>
+                </td>
+              </tr>
+            </table>
+            <p class="secondary" style="margin:0 0 18px 0;font-family:${FONT_BODY};font-size:15px;line-height:1.6;color:#5C5C66;">
+              If anything is broken, surprising, or missing &mdash; reply to this email. It goes straight to my inbox.
+            </p>
+            <p class="ink" style="margin:0 0 8px 0;font-family:${FONT_BODY};font-size:16px;line-height:1.6;color:#1F1F23;">
+              &mdash; Alex
+            </p>
+          </td>
+        </tr>
+        <!-- Divider -->
+        <tr>
+          <td style="padding:32px 40px 0 40px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr><td class="rule" style="border-top:1px solid #E5E5E5;height:1px;line-height:1px;font-size:0;">&nbsp;</td></tr>
+            </table>
+          </td>
+        </tr>
+        <!-- Footer -->
+        <tr>
+          <td style="padding:24px 40px 48px 40px;">
+            <p class="muted" style="margin:0 0 6px 0;font-family:${FONT_BODY};font-size:12px;line-height:1.6;color:#737373;">
+              <a class="footer-link" href="https://bernstein.run" style="color:#737373;text-decoration:none;">bernstein.run</a>
+              &nbsp;&middot;&nbsp; Multi-agent orchestration for CLI coding agents
+            </p>
+            <p class="muted appleAddress" style="margin:0 0 12px 0;font-family:${FONT_BODY};font-size:12px;line-height:1.6;color:#737373;">
+              Bernstein &middot; Unit 4, Park Royal Business Centre, 9&ndash;17 Park Royal Road, London NW10 7LQ, United Kingdom
+            </p>
+            <p class="muted" style="margin:0;font-family:${FONT_BODY};font-size:12px;line-height:1.6;color:#737373;">
+              Don't want these?&nbsp;
+              <a class="footer-link" href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color:#737373;text-decoration:underline;">Unsubscribe</a>.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <!--[if mso]>
+      </td></tr></table>
+      <![endif]-->
+    </td>
+  </tr>
+</table>
+</body>
+</html>`;
 }
 
 async function sendConfirmation(apiKey: string, email: string): Promise<void> {
