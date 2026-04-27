@@ -11,15 +11,11 @@ const SITE_ORIGIN = process.env.BERNSTEIN_PUBLIC_ORIGIN ?? 'https://bernstein.ru
  *
  * Required env (set on the OVH VPS in /srv/bernstein-landing/app/.env):
  *   - RESEND_API_KEY_BERNSTEIN  : Full-Access key for the bernstein.run Resend account.
- *   - BERNSTEIN_AUDIENCE_ID     : Optional override; defaults to the audience ID
- *                                 created on 2026-04-25.
+ *   - BERNSTEIN_AUDIENCE_ID     : Resend audience UUID for bernstein.run subscribers.
  *
- * If the env is not set (e.g. preview deploys, local dev without an .env), the
- * route falls back to a 200/noop stub so the UI does not break.
+ * If either env var is missing (preview deploys, local dev without an .env),
+ * the route falls back to a 200/noop stub so the UI does not break.
  */
-
-const BERNSTEIN_AUDIENCE_ID =
-  process.env.BERNSTEIN_AUDIENCE_ID ?? 'REDACTED-AUDIENCE-ID-DA86';
 
 const FROM = 'Bernstein <hello@bernstein.run>';
 const SUBJECT = 'Welcome.';
@@ -28,16 +24,16 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const runtime = 'nodejs';
 
-async function alreadyExists(apiKey: string, email: string): Promise<boolean> {
+async function alreadyExists(apiKey: string, audienceId: string, email: string): Promise<boolean> {
   const r = await fetch(
-    `https://api.resend.com/audiences/${BERNSTEIN_AUDIENCE_ID}/contacts/${encodeURIComponent(email)}`,
+    `https://api.resend.com/audiences/${audienceId}/contacts/${encodeURIComponent(email)}`,
     { headers: { Authorization: `Bearer ${apiKey}` }, cache: 'no-store' },
   );
   return r.status === 200;
 }
 
-async function createContact(apiKey: string, email: string): Promise<Response> {
-  return fetch(`https://api.resend.com/audiences/${BERNSTEIN_AUDIENCE_ID}/contacts`, {
+async function createContact(apiKey: string, audienceId: string, email: string): Promise<Response> {
+  return fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, unsubscribed: false }),
@@ -174,13 +170,13 @@ Occasional notes from bernstein.run. No daily noise.&#8202;&#8202;&#8202;&#8202;
 </html>`;
 }
 
-async function sendConfirmation(apiKey: string, email: string): Promise<void> {
+async function sendConfirmation(apiKey: string, audienceId: string, email: string): Promise<void> {
   // Sign a per-email unsub URL pointing at our /api/unsubscribe endpoint.
   // Resend does NOT substitute {{{RESEND_UNSUBSCRIBE_URL}}} on direct
   // POST /emails (only on broadcasts/templates), so we self-sign.
   const unsubUrl = buildUnsubUrl({
     origin: SITE_ORIGIN,
-    audienceId: BERNSTEIN_AUDIENCE_ID,
+    audienceId,
     email,
   });
   const r = await fetch('https://api.resend.com/emails', {
@@ -218,25 +214,26 @@ export async function POST(request: Request) {
   }
 
   const apiKey = process.env.RESEND_API_KEY_BERNSTEIN;
-  if (!apiKey) {
+  const audienceId = process.env.BERNSTEIN_AUDIENCE_ID;
+  if (!apiKey || !audienceId) {
     if (process.env.NODE_ENV !== 'production') {
-      console.warn('[notify] RESEND_API_KEY_BERNSTEIN missing; not persisting (dev fallback).');
+      console.warn('[notify] RESEND_API_KEY_BERNSTEIN or BERNSTEIN_AUDIENCE_ID missing; not persisting (dev fallback).');
     }
     return NextResponse.json({ ok: true, status: 'noop' });
   }
 
   try {
-    if (await alreadyExists(apiKey, email)) {
+    if (await alreadyExists(apiKey, audienceId, email)) {
       return NextResponse.json({ ok: true, status: 'already_subscribed' });
     }
-    const upstream = await createContact(apiKey, email);
+    const upstream = await createContact(apiKey, audienceId, email);
     if (!upstream.ok) {
       console.error('[notify] resend upstream error', upstream.status, await upstream.text());
       return NextResponse.json({ ok: false, error: 'upstream' }, { status: 502 });
     }
     // Fire-and-await the confirmation email; do not fail the whole request
     // if the send call errors (the contact is already saved).
-    await sendConfirmation(apiKey, email).catch((e) => console.error('[notify] confirm fail', e));
+    await sendConfirmation(apiKey, audienceId, email).catch((e) => console.error('[notify] confirm fail', e));
     return NextResponse.json({ ok: true, status: 'subscribed' });
   } catch (err) {
     console.error('[notify] unexpected error', err);

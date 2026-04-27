@@ -8,8 +8,7 @@ services:
     env_file:
       # On the VPS at /srv/bernstein-landing/app/.env, set:
       #   RESEND_API_KEY_BERNSTEIN=re_...
-      # Optional override:
-      #   BERNSTEIN_AUDIENCE_ID=REDACTED-AUDIENCE-ID-DA86
+      #   BERNSTEIN_AUDIENCE_ID=<resend audience uuid>
       - .env
     networks:
       - deploy_homepage
