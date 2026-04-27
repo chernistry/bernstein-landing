@@ -1,0 +1,88 @@
+---
+title: "A daemon that closes its own pull requests"
+description: "How Bernstein's autofix daemon turns a red CI run on a Bernstein-opened PR into a fix commit — without becoming a footgun. The design, the safety rails, and the operator surface."
+date: "2026-04-27"
+tags: ["multi-agent orchestration", "CI", "GitHub Actions", "developer experience", "autofix", "daemon"]
+---
+
+<Lead>
+Bernstein opens a pull request. CI fails. You're not at your laptop. The autofix daemon notices, fetches the failing log, classifies the break, hands the log to a fresh agent in the same worktree, and pushes the fix commit if the agent succeeds. This post walks through the loop, the rails that keep it from going sideways, and the operator console you use to watch it.
+</Lead>
+
+## The boring red
+
+Most failing CI runs on a Bernstein-opened PR are boring. A renamed import the agent missed in one file. A `ruff` rule that bites only in CI's stricter config. A flaky integration test with a clear retry path. A type signature that's right in the local file and wrong in the consumer.
+
+Boring red is the ideal autofix workload. The agent already has the diff, the log spells out the failure, and the fix is mechanical. Sitting in front of the terminal to paste a log into a new agent prompt and re-run the same agent against the same worktree is exactly the kind of toil that should be automated away.
+
+## The loop
+
+`bernstein autofix start` runs a daemon that ticks every `poll_interval_seconds` (default 60s). Each tick:
+
+1. Calls a `FailingPRSource` for the list of Bernstein-opened PRs whose head commit has a red CI run.
+2. For each candidate, fetches the failing log via `gh run view --log-failed`, head-truncated to `log_byte_budget` bytes (default 64KB — enough for a full pytest traceback, small enough to keep prompt budgets predictable).
+3. Runs the log through a keyword classifier that buckets the failure (`lint`, `type`, `test`, `dependency`, `build`, `unknown`) and picks a bandit arm — model and effort tuned for that bucket.
+4. Synthesises a goal that includes the run id, the classifier verdict, and the truncated log, and hands it to a `DispatchHook` that runs the agent against the PR's worktree.
+5. If the hook returns success and a non-empty commit SHA, the dispatcher records the attempt in the audit chain. If it doesn't, the dispatcher records the failure and lets the next tick try again — up to a hard cap.
+
+Both `FailingPRSource` and `DispatchHook` are protocols, not hardwired implementations. The daemon owns the lifecycle, the cost accounting, the audit chain, and the safety rails; you supply the two ends. v1.9.0 ships the rails-and-state half; the network-backed source and the default GitHub-aware dispatch hook land in a follow-up release. Operators who want to drive the daemon today can install their own hooks via the Python API.
+
+## The rails
+
+Self-healing CI is one bad heuristic away from a 3am runaway that burns through your API budget pushing wrong commits onto a release branch. The daemon ships with five rails, none of them optional:
+
+**Per-PR opt-in label.** A PR is invisible to the daemon unless it carries the `bernstein-autofix` label (configurable per repo). Adding the label is the only way to opt a PR into automated fix attempts; removing it stops further attempts immediately.
+
+**Per-repo cost cap.** `cost_cap_usd` (default $5) is consulted before every dispatch. The dispatcher refuses to invoke the bandit router for a repo over budget, and the budget resets on a configurable window. A misbehaving classifier cannot drain an account.
+
+**Hard attempt budget per push SHA.** `MAX_ATTEMPTS_PER_PUSH = 3`. Three failed attempts against the same commit and the dispatcher labels the PR `needs-human`, posts a summary comment with the attempt history, and stops touching the PR until a human pushes a new commit or removes the escalation label. There is no retry-forever path.
+
+**Force-push off by default.** `allow_force_push = false`. Without it, the dispatcher pushes a fix commit on top of the PR branch — never overwrites the operator's history. Force-push is per-repo, opt-in, and audited separately.
+
+**HMAC-chained audit log.** Every dispatch decision — every label add, every comment posted, every attempt outcome — is appended to `.sdd/audit/` in an HMAC-chained JSONL. The chain detects tampering and gives you a complete reconstruction of the daemon's behaviour after the fact. If autofix did something surprising, the audit log explains why.
+
+## The operator surface
+
+The daemon writes pid, status, and recent attempts into `.sdd/runtime/autofix/`. Three commands cover the operator workflow:
+
+```bash
+bernstein autofix status
+# autofix daemon: running (pid=84219)
+# last tick:      Sun Apr 27 14:08:01 2026
+#
+# Recent attempts (newest first):
+#   chernistry/bernstein#960  attempt=1  outcome=success  classifier=lint  cost=$0.0214
+#   chernistry/bernstein#958  attempt=2  outcome=needs_human  classifier=test  cost=$0.4832
+```
+
+`status --watch` tails new attempts as they land. `status --json` emits the same data structured for piping into a dashboard. Both work whether the daemon is running locally or under a `bernstein daemon install`-ed systemd unit.
+
+```bash
+bernstein autofix attach
+# {"attempt_id":"...","repo":"chernistry/bernstein","pr_number":960,...}
+# {"attempt_id":"...","repo":"chernistry/bernstein","pr_number":958,...}
+```
+
+`attach` is the resume-token handoff: rejoin a session from any terminal — second laptop, SSH from a phone — by replaying the JSONL log and tailing it from there. The daemon does not need to know who its current viewer is, and a shell exit never loses history.
+
+## What it doesn't do
+
+The daemon attempts mechanical fixes. It does not refactor. It does not merge. It does not add new tests, change schemas, or touch files outside the failing run's blast radius. It does not bypass branch protection or required reviews — every fix commit goes through the same review pipeline as any other. If the failure mode is "this entire feature is wrong," the classifier will hit `unknown`, the bandit arm will pick a conservative single attempt, and the daemon will land on `needs-human` after one try instead of three.
+
+In other words: the autofix daemon is the patch on top of a working review process, not a replacement for it.
+
+## Try it
+
+```bash
+pipx install 'bernstein>=1.9.0'
+
+# write ~/.config/bernstein/autofix.toml:
+#   [[repo]]
+#   name = "your-org/your-repo"
+#   cost_cap_usd = 5.0
+
+bernstein autofix start --foreground --once
+# autofix daemon completed after 1 tick(s).
+```
+
+Run it under `bernstein daemon install` to keep it up across reboots, and pair it with `bernstein chat serve` if you'd like the `needs-human` escalations to land in your Telegram thread. The previous post on [operator commands](/blog/operator-commands) covers the chat bridge and the daemon installer; this one is the piece that closes the loop.
