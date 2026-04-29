@@ -42,6 +42,12 @@ const agents: Agent[] = [
   { name: 'Autohand', models: 'Anthropic / OpenAI', category: 'CLI', monogram: 'Ah', hue: 170 },
   { name: 'Forge', models: 'forgecode · any model', category: 'CLI', monogram: 'Fg', hue: 55 },
   { name: 'Hermes', models: 'Nous Research · Anthropic / OpenAI', category: 'CLI', monogram: 'He', hue: 295 },
+  { name: 'OpenHands', models: 'Any LiteLLM-supported · autonomous loop', category: 'CLI', monogram: 'OH', hue: 25 },
+  { name: 'Open Interpreter', models: 'Any · local code execution', category: 'CLI', monogram: 'OI', hue: 165 },
+  { name: 'gptme', models: 'Anthropic / OpenAI / OpenRouter', category: 'CLI', monogram: 'gm', hue: 115 },
+  { name: 'Plandex', models: 'Plandex Cloud or self-hosted', category: 'CLI', monogram: 'Pl', hue: 250 },
+  { name: 'AIChat', models: 'OpenAI / Anthropic / Groq / Gemini', category: 'CLI', monogram: 'Ac', hue: 75 },
+  { name: 'Letta Code', models: 'Letta-routed · cross-task memory', category: 'CLI', monogram: 'Lc', hue: 320 },
   { name: 'Generic', models: 'Any OpenAI-compatible', category: 'Adapter', monogram: '·', hue: null },
   { name: 'Composio', models: '@aoagents/ao · wrapped as a single agent', category: 'Orchestrator', monogram: 'Co', hue: 305 },
   { name: 'Ralphex', models: 'umputun/ralphex · wrapped as a single agent', category: 'Orchestrator', monogram: 'Rx', hue: 5 },
@@ -99,7 +105,7 @@ export function AgentsGrid() {
       <ScrollReveal>
         <div className="section-header">
           <h2 id="agents-heading">
-            Works with every major coding agent <span className="agent-count">31</span>
+            Works with every major coding agent <span className="agent-count">37</span>
           </h2>
           <p>
             Mix local models for boilerplate with cloud models for architecture. In the same run. Plus 2 leaf-node delegation adapters that wrap competing CLI orchestrators —{' '}
@@ -150,7 +156,7 @@ export function AgentsGrid() {
       <ScrollReveal delay={260}>
         <div className="agents-more-wrap">
           <a href="https://bernstein.readthedocs.io/" className="agents-more">
-            View all 31 adapters and configuration &rarr;
+            View all 37 adapters and configuration &rarr;
           </a>
         </div>
       </ScrollReveal>

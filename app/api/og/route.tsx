@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
                 color: '#c0c0d0',
               }}
             >
-              31 adapters
+              37 adapters
             </div>
           </div>
         </div>

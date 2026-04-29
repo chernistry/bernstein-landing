@@ -46,7 +46,7 @@ const mergedTable: CompareTable = {
       label: 'CLI agent support',
       onlyBernstein: true,
       cells: [
-        { kind: 'yes', text: '31 adapters', aria: 'Yes: 31 adapters' },
+        { kind: 'yes', text: '37 adapters', aria: 'Yes: 37 adapters' },
         { kind: 'partial', text: '~ several', aria: 'Partial: several agents' },
         { kind: 'partial', text: '~ few', aria: 'Partial: few agents' },
         { kind: 'no', text: 'No', aria: 'No' },

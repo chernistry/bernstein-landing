@@ -22,7 +22,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "What AI coding agents does Bernstein support?",
     answer:
-      "Bernstein ships 31 adapters: Claude Code, Codex CLI, Gemini CLI, OpenAI Agents SDK, Cursor, Aider, Amp, Kiro, Kilo, Qwen, Goose, Cody, Continue, OpenCode, Ollama, Cloudflare Agents, IaC, GitHub Copilot, Droid (Factory AI), Crush (Charm), Auggie (Augment), Kimi, Rovo Dev (Atlassian), Cline, Codebuff, Pi, Mistral Vibe, Autohand, Forge, Hermes, and a Generic adapter that wraps any CLI tool. Plus two leaf-node delegation adapters — Composio (@aoagents/ao) and Ralphex (umputun/ralphex) — that wrap competing CLI orchestrators as if each were a single agent.",
+      "Bernstein ships 37 adapters: Claude Code, Codex CLI, Gemini CLI, OpenAI Agents SDK, Cursor, Aider, Amp, Kiro, Kilo, Qwen, Goose, Cody, Continue, OpenCode, Ollama, Cloudflare Agents, IaC, GitHub Copilot, Droid (Factory AI), Crush (Charm), Auggie (Augment), Kimi, Rovo Dev (Atlassian), Cline, Codebuff, Pi, Mistral Vibe, Autohand, Forge, Hermes, and a Generic adapter that wraps any CLI tool. Plus two leaf-node delegation adapters — Composio (@aoagents/ao) and Ralphex (umputun/ralphex) — that wrap competing CLI orchestrators as if each were a single agent.",
   },
   {
     question: "Can Bernstein orchestrate other orchestrators?",
@@ -145,6 +145,12 @@ const SUPPORTED_AGENTS = [
   "Autohand",
   "Forge",
   "Hermes",
+  "OpenHands",
+  "Open Interpreter",
+  "gptme",
+  "Plandex",
+  "AIChat",
+  "Letta Code",
   "Generic",
 ];
 
@@ -191,7 +197,7 @@ uv pip install bernstein`}</code>
     return (
       <>
         <p>
-          Bernstein ships 31 adapters covering the major CLI coding agents plus
+          Bernstein ships 37 adapters covering the major CLI coding agents plus
           a generic wrapper for any CLI tool:
         </p>
         <ul className="faq-pill-row" role="list">

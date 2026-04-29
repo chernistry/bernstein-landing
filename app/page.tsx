@@ -47,7 +47,7 @@ const SOFTWARE_APP_JSON_LD = {
   downloadUrl: 'https://pypi.org/project/bernstein/',
   featureList: [
     'Deterministic scheduling',
-    '31 agent adapters',
+    '37 agent adapters',
     'Pluggable sandbox backends (worktree, Docker, E2B, Modal, Blaxel, Cloudflare, Daytona, Runloop, Vercel)',
     'Cloud artifact sinks (S3, GCS, Azure Blob, Cloudflare R2)',
     'Progressive-disclosure skill packs via load_skill MCP tool',
@@ -87,7 +87,7 @@ const FAQ_JSON_LD = {
       name: 'What AI coding agents does Bernstein support?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Bernstein ships 31 adapters: Claude Code, Codex CLI, Gemini CLI, OpenAI Agents SDK, Cursor, Aider, Amp, Kiro, Kilo, Qwen, Goose, Cody, Continue, OpenCode, Ollama, Cloudflare Agents, IaC, GitHub Copilot, Droid (Factory AI), Crush (Charm), Auggie (Augment), Kimi, Rovo Dev (Atlassian), Cline, Codebuff, Pi, Mistral Vibe, Autohand, Forge, Hermes, and a Generic adapter that wraps any CLI tool. Plus two leaf-node delegation adapters — Composio (@aoagents/ao) and Ralphex (umputun/ralphex) — that wrap competing CLI orchestrators as if each were a single agent.',
+        text: 'Bernstein ships 37 adapters: Claude Code, Codex CLI, Gemini CLI, OpenAI Agents SDK, Cursor, Aider, Amp, Kiro, Kilo, Qwen, Goose, Cody, Continue, OpenCode, Ollama, Cloudflare Agents, IaC, GitHub Copilot, Droid (Factory AI), Crush (Charm), Auggie (Augment), Kimi, Rovo Dev (Atlassian), Cline, Codebuff, Pi, Mistral Vibe, Autohand, Forge, Hermes, and a Generic adapter that wraps any CLI tool. Plus two leaf-node delegation adapters — Composio (@aoagents/ao) and Ralphex (umputun/ralphex) — that wrap competing CLI orchestrators as if each were a single agent.',
       },
     },
     {

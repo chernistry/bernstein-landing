@@ -65,7 +65,7 @@ export async function Hero() {
         </h1>
         <p className="hero-sub">
           Tell it what you want built. It splits the work across several
-          AI agents (Claude Code, Codex, Gemini&nbsp;CLI, and 28 more),
+          AI agents (Claude Code, Codex, Gemini&nbsp;CLI, and 34 more),
           runs the tests, and merges only the code that actually passes.
         </p>
         <div className="hero-actions">
